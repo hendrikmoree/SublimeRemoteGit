@@ -1,8 +1,8 @@
 
-from ..commands import GIT_ADD, GIT_RESET, GIT_CHECKOUT
+from ..commands import GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_DIFF
 
 STAGED = [GIT_RESET]
-CHANGED = [GIT_ADD, GIT_CHECKOUT]
+CHANGED = [GIT_ADD, GIT_CHECKOUT, GIT_DIFF]
 UNTRACKED = [GIT_ADD]
 
 class GitStatus(object):

@@ -2,8 +2,10 @@ from subprocess import Popen, PIPE
 from os.path import abspath, dirname
 mydir = abspath(dirname(__file__))
 
-def remoteCommand(view, command):
-    args = ["bash", "remote_command.sh", projectRoot(view), command]
+def remoteCommand(view, command, option=None):
+    args = ["bash", "remote_command.sh", projectRoot(view), '"%s"' % command]
+    if option:
+        args.append('"%s"' % option)
     print (args)
     proc = Popen(' '.join(args), cwd=mydir, stdout=PIPE, stderr=PIPE, stdin=PIPE, shell=True)
     stdout, _ = proc.communicate()

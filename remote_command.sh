@@ -8,6 +8,10 @@
 
 PROJECT_DIR=$1
 shift
+GIT_COMMAND=$1
+shift
+QUOTED_OPTION=$1
+shift
 
 PROJECT_NAME=$(basename "$PROJECT_DIR")
 mountPoint=$PROJECT_DIR
@@ -24,11 +28,11 @@ while true; do
     mountPoint=$(dirname "$mountPoint")
 done
 if [ "$mountPoint" == "/" ] || [ "$mountPoint" == "." ] || [ "$mountPoint" == "$HOME/development" ]; then
-    "$@"
+    $GIT_COMMAND "$QUOTED_OPTION"
     exit
 fi
 SERVER_DIR=$(mount | grep $mountPoint | awk '{print $1}' | awk -F: '{print $2}' | head -n 1)
 SERVER_LOGIN=$(ps aux | grep sshfs | grep $mountPoint | awk '{print $(NF-1)}' | awk -F: '{print $1}' | head -n 1)
 SERVER_PORT=$(ps aux | grep sshfs | grep $mountPoint | awk '{print $(NF-2)}' | head -n 1)
-# echo REMOTE_USERNAME=${USER} ssh $SERVER_LOGIN -o SendEnv=REMOTE_USERNAME -p $SERVER_PORT "(cd $SERVER_DIR/$serverProjectDir; $args)"
-REMOTE_USERNAME=${USER} ssh $SERVER_LOGIN -o SendEnv=REMOTE_USERNAME -p $SERVER_PORT "(cd $SERVER_DIR/$serverProjectDir; $@)"
+echo REMOTE_USERNAME=${USER} ssh $SERVER_LOGIN -o SendEnv=REMOTE_USERNAME -p $SERVER_PORT "(cd $SERVER_DIR/$serverProjectDir; $GIT_COMMAND \"$QUOTED_OPTION\")"
+REMOTE_USERNAME=${USER} ssh $SERVER_LOGIN -o SendEnv=REMOTE_USERNAME -p $SERVER_PORT "(cd $SERVER_DIR/$serverProjectDir; $GIT_COMMAND \"$QUOTED_OPTION\")"

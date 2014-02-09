@@ -32,17 +32,25 @@ class RemoteGitCommand(TextCommand):
     def run(self, edit):
         filename, commands = findFilenameAndCommands(self.view)
         if filename and self.command in commands:
-            remoteCommand(self.view, '%s \"%s\"' % (self.command, filename))
-            self.view.run_command("remote_git_st")
+            remoteCommand(self.view, self.command, filename)
+            if not self.showOuput:
+                self.view.run_command("remote_git_st")
 
 class RemoteGitAdd(RemoteGitCommand):
     command = GIT_ADD
+    showOuput = False
 
 class RemoteGitReset(RemoteGitCommand):
     command = GIT_RESET
+    showOuput = False
 
 class RemoteGitCheckout(RemoteGitCommand):
     command = GIT_CHECKOUT
+    showOuput = False
+
+class RemoteGitDiff(RemoteGitCommand):
+    command = GIT_DIFF
+    showOuput = True
 
 class RemoteGitCommit(WindowCommand):
     def run(self):

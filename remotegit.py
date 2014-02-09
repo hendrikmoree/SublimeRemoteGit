@@ -58,7 +58,7 @@ class RemoteGitCommit(WindowCommand):
 
     def commit(self, message):
         view = self.window.active_view()
-        remoteCommand(view, GIT_COMMIT + " \"%s\"" % message)
+        remoteCommand(view, GIT_COMMIT, message)
         view.run_command("remote_git_st")
 
 class RemoteGitChangeLine(TextCommand):

@@ -15,6 +15,9 @@
     { "keys": ["p"], "command": "remote_git_push", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
     ]},
+    { "keys": ["d"], "command": "remote_git_diff", "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
+    ]},
     { "keys": ["down"], "command": "remote_git_change_line", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
     ]},

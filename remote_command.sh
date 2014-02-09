@@ -5,14 +5,15 @@
 # Copyright (C) 2013-2014 Seecr (Seek You Too B.V.) http://seecr.nl
 #
 ## end license ##
-
 PROJECT_DIR=$1
 shift
 GIT_COMMAND=$1
 shift
-QUOTED_OPTION=$1
-shift
 
+COMMAND=$GIT_COMMAND
+if [ "$#" -eq "1" ]; then
+    COMMAND="$COMMAND \"$1\""
+fi
 PROJECT_NAME=$(basename "$PROJECT_DIR")
 mountPoint=$PROJECT_DIR
 serverProjectDir=.
@@ -28,11 +29,11 @@ while true; do
     mountPoint=$(dirname "$mountPoint")
 done
 if [ "$mountPoint" == "/" ] || [ "$mountPoint" == "." ] || [ "$mountPoint" == "$HOME/development" ]; then
-    $GIT_COMMAND "$QUOTED_OPTION"
+    eval $COMMAND
     exit
 fi
 SERVER_DIR=$(mount | grep $mountPoint | awk '{print $1}' | awk -F: '{print $2}' | head -n 1)
 SERVER_LOGIN=$(ps aux | grep sshfs | grep $mountPoint | awk '{print $(NF-1)}' | awk -F: '{print $1}' | head -n 1)
 SERVER_PORT=$(ps aux | grep sshfs | grep $mountPoint | awk '{print $(NF-2)}' | head -n 1)
-echo REMOTE_USERNAME=${USER} ssh $SERVER_LOGIN -o SendEnv=REMOTE_USERNAME -p $SERVER_PORT "(cd $SERVER_DIR/$serverProjectDir; $GIT_COMMAND \"$QUOTED_OPTION\")"
-REMOTE_USERNAME=${USER} ssh $SERVER_LOGIN -o SendEnv=REMOTE_USERNAME -p $SERVER_PORT "(cd $SERVER_DIR/$serverProjectDir; $GIT_COMMAND \"$QUOTED_OPTION\")"
+# echo REMOTE_USERNAME=${USER} ssh $SERVER_LOGIN -o SendEnv=REMOTE_USERNAME -p $SERVER_PORT "(cd $SERVER_DIR/$serverProjectDir; $COMMAND)"
+REMOTE_USERNAME=${USER} ssh $SERVER_LOGIN -o SendEnv=REMOTE_USERNAME -p $SERVER_PORT "(cd $SERVER_DIR/$serverProjectDir; $COMMAND)"

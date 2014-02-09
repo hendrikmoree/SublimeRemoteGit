@@ -8,8 +8,8 @@ def remoteCommand(view, command, option=None):
         args.append('"%s"' % option)
     print (args)
     proc = Popen(' '.join(args), cwd=mydir, stdout=PIPE, stderr=PIPE, stdin=PIPE, shell=True)
-    stdout, _ = proc.communicate()
-    return stdout.decode('utf-8')
+    stdout, stderr = proc.communicate()
+    return stderr.decode('utf-8') + stdout.decode('utf-8')
 
 def projectRoot(view):
     currentFile = view.file_name()

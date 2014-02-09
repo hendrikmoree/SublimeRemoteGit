@@ -1,7 +1,7 @@
 
 from unittest import TestCase
 from SublimeRemoteGit.classes.gitstatus import GitStatus
-
+from SublimeRemoteGit.commands import GIT_PUSH
 
 class GitStatusTest(TestCase):
 
@@ -36,7 +36,9 @@ class GitStatusTest(TestCase):
         self.assertEqual("test/alltest.sh", filename)
         filename, commands = gitStatus.fileAndCommandsForLine(16)
         self.assertEqual("test/alltest.py", filename)
-        self.assertEqual(None, gitStatus.fileAndCommandsForLine(12))
+        filename, commands = gitStatus.fileAndCommandsForLine(12)
+        self.assertEqual(None, filename)
+        self.assertEqual([GIT_PUSH], commands)
 
         self.assertEqual(4, gitStatus.firstlineno())
         self.assertEqual(10, gitStatus.nextlineno(4))

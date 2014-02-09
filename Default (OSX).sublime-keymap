@@ -12,6 +12,9 @@
     { "keys": ["m"], "command": "remote_git_commit", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
     ]},
+    { "keys": ["p"], "command": "remote_git_push", "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
+    ]},
     { "keys": ["down"], "command": "remote_git_change_line", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
     ]},

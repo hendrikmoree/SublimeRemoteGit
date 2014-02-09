@@ -1,9 +1,10 @@
 
-from ..commands import GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_DIFF
+from ..commands import GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH
 
 STAGED = [GIT_RESET]
 CHANGED = [GIT_ADD, GIT_CHECKOUT, GIT_DIFF]
 UNTRACKED = [GIT_ADD]
+DEFAULT_COMMANDS = [GIT_PUSH]
 
 class GitStatus(object):
 
@@ -17,7 +18,8 @@ class GitStatus(object):
         for commands, lines in [(STAGED, self.staged), (CHANGED, self.changed), (UNTRACKED, self.untracked)]:
             for n, filename in lines:
                 if lineno == n:
-                    return filename, commands
+                    return filename, commands + DEFAULT_COMMANDS
+        return None, DEFAULT_COMMANDS
 
     def firstlineno(self):
         return self._linenos[0]

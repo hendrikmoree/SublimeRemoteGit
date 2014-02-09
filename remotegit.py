@@ -10,9 +10,6 @@ class RemoteGitSt(TextCommand):
     def run(self, edit):
         result = remoteCommand(self.view, GIT_STATUS)
         result += remoteCommand(self.view, GIT_DIFF)
-        if result.startswith("nothing to commit"):
-            message_dialog(result)
-            return
 
         if self.view.name() == "RemoteGitSt":
             self.view.set_read_only(False)

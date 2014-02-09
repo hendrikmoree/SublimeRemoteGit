@@ -1,0 +1,21 @@
+[
+    { "keys": ["f9"], "command": "remote_git_st" },
+    { "keys": ["a"], "command": "remote_git_add", "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
+    ]},
+    { "keys": ["r"], "command": "remote_git_reset", "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
+    ]},
+    { "keys": ["c"], "command": "remote_git_checkout", "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
+    ]},
+    { "keys": ["m"], "command": "remote_git_commit", "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
+    ]},
+    { "keys": ["down"], "command": "remote_git_change_line", "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
+    ]},
+    { "keys": ["up"], "command": "remote_git_change_line", "args": {"up": true}, "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
+    ]}
+]

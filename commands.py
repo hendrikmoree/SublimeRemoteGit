@@ -1,0 +1,6 @@
+GIT_RESET = "git reset HEAD"
+GIT_ADD = "git add"
+GIT_STATUS = "git status"
+GIT_CHECKOUT = "git checkout --"
+GIT_COMMIT = "git commit -m"
+GIT_DIFF = "git diff --staged"

@@ -1,6 +1,6 @@
 
-from sublime_plugin import TextCommand, WindowCommand
-from sublime import Region, message_dialog
+from sublime_plugin import TextCommand
+from sublime import Region
 
 from .classes.gitstatus import GitStatus
 from .commands import GIT_STATUS, GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_COMMIT, GIT_DIFF, GIT_PUSH, GIT_RM

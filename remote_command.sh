@@ -29,7 +29,10 @@ while true; do
     mountPoint=$(dirname "$mountPoint")
 done
 if [ "$mountPoint" == "/" ] || [ "$mountPoint" == "." ] || [ "$mountPoint" == "$HOME/development" ]; then
-    eval $COMMAND
+    (
+        cd $PROJECT_DIR
+        eval $COMMAND
+    )
     exit
 fi
 SERVER_DIR=$(mount | grep $mountPoint | awk '{print $1}' | awk -F: '{print $2}' | head -n 1)

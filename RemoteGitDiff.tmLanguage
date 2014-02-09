@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array/>
+	<key>name</key>
+	<string>Git Diff</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>---</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>comment.git.diff.from-file</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\+\+\+</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>comment.git.diff.to-file</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^@@</string>
+			<key>end</key>
+			<string>@@</string>
+			<key>name</key>
+			<string>comment.git.diff.range</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\+</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>markup.inserted.diff</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^-</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>markup.deleted.diff</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>text.git-diff</string>
+	<key>uuid</key>
+	<string>f29887b3-f37c-44cf-ac95-21b5737854b1</string>
+</dict>
+</plist>

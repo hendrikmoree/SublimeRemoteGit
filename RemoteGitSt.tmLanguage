@@ -9,7 +9,128 @@
 	<key>name</key>
 	<string>RemoteGitSt</string>
 	<key>patterns</key>
-	<array/>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>^#   \(</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>comment.git.status</string>
+        </dict>
+		<dict>
+			<key>begin</key>
+			<string>^# [A-Z]</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>comment.git.status</string>
+        </dict>
+		<dict>
+			<key>begin</key>
+			<string>^#$</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>comment.git.status</string>
+        </dict>
+		<dict>
+			<key>begin</key>
+			<string>^no changes</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>comment.git.status</string>
+        </dict>
+		<dict>
+			<key>begin</key>
+			<string>^(#   )modified</string>
+			<key>end</key>
+			<string>$</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>comment</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>markup.changed.status</string>
+        </dict>
+		<dict>
+			<key>begin</key>
+			<string>^(#   )new file</string>
+			<key>end</key>
+			<string>$</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>comment</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>markup.inserted.status</string>
+        </dict>
+		<dict>
+			<key>begin</key>
+			<string>^#   (?!modified)</string>
+			<key>end</key>
+			<string>$</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>comment</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>markup.deleted.status</string>
+        </dict>
+        <dict>
+			<key>begin</key>
+			<string>---</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>comment.git.diff.from-file</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\+\+\+</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>comment.git.diff.to-file</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^@@</string>
+			<key>end</key>
+			<string>@@</string>
+			<key>name</key>
+			<string>comment.git.diff.range</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\+</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>markup.inserted.diff</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^-</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>markup.deleted.diff</string>
+		</dict>
+    </array>
 	<key>scopeName</key>
 	<string>source.remote_git_st</string>
 	<key>uuid</key>

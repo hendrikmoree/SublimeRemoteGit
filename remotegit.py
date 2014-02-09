@@ -9,7 +9,7 @@ from .utils import remoteCommand
 class RemoteGitSt(TextCommand):
     def run(self, edit):
         result = remoteCommand(self.view, GIT_STATUS)
-        result += remoteCommand(self.view, GIT_DIFF)
+        # result += remoteCommand(self.view, GIT_DIFF)
 
         if self.view.name() == "RemoteGitSt":
             replaceView(self.view, edit, result)
@@ -18,10 +18,11 @@ class RemoteGitSt(TextCommand):
             newView = self.view.window().new_file()
             newView.set_name("RemoteGitSt")
             newView.set_scratch(True)
-            newView.set_syntax_file('Packages/SublimeRemoteGit/RemoteGitSt.tmLanguage')
             newView.insert(edit, 0, result)
             newView.set_read_only(True)
+            newView.settings().set('line_numbers', False)
             view = newView
+        view.set_syntax_file('Packages/SublimeRemoteGit/RemoteGitSt.tmLanguage')
         gitStatus = GitStatus.fromMessage(view.substr(Region(0, view.size())))
         gotoLine(view, gitStatus.firstlineno())
 
@@ -69,14 +70,16 @@ class RemoteGitPush(RemoteGitCommand):
     showOuput = True
     addFilename = False
 
-class RemoteGitCommit(WindowCommand):
-    def run(self):
-        self.window.show_input_panel("Commit message: ", "", self.commit, None, None)
+class RemoteGitCommit(TextCommand):
+    def run(self, edit):
+        result = remoteCommand(self.view, GIT_STATUS)
+        result += remoteCommand(self.view, GIT_DIFF, "--staged")
+        replaceView(self.view, edit, result)
+        self.view.window().show_input_panel("Commit message: ", "", self.commit, None, None)
 
     def commit(self, message):
-        view = self.window.active_view()
-        remoteCommand(view, GIT_COMMIT, message)
-        view.run_command("remote_git_st")
+        remoteCommand(self.view, GIT_COMMIT, message)
+        self.view.run_command("remote_git_st")
 
 class RemoteGitChangeLine(TextCommand):
     def run(self, edit, up=False):

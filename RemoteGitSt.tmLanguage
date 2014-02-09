@@ -42,6 +42,14 @@
 			<key>name</key>
 			<string>comment.git.status</string>
         </dict>
+        <dict>
+        	<key>begin</key>
+        	<string>^nothing to commit</string>
+        	<key>end</key>
+        	<string>$</string>
+        	<key>name</key>
+        	<string>comment.git.status</string>
+        </dict>
 		<dict>
 			<key>begin</key>
 			<string>^(#   )modified</string>

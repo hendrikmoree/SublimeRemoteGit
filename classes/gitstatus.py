@@ -1,8 +1,9 @@
 
-from ..commands import GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH
+from copy import copy
+from ..commands import GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH, GIT_RM
 
 STAGED = [GIT_RESET]
-CHANGED = [GIT_ADD, GIT_CHECKOUT, GIT_DIFF]
+CHANGED = [GIT_CHECKOUT, GIT_DIFF]
 UNTRACKED = [GIT_ADD]
 DEFAULT_COMMANDS = [GIT_PUSH]
 
@@ -12,13 +13,19 @@ class GitStatus(object):
         self.staged = staged
         self.changed = changed
         self.untracked = untracked
-        self._linenos = [n for n, _ in self.staged + self.changed + self.untracked]
+        self._linenos = [n for n, _, _ in self.staged + self.changed + self.untracked]
 
     def fileAndCommandsForLine(self, lineno):
         for commands, lines in [(STAGED, self.staged), (CHANGED, self.changed), (UNTRACKED, self.untracked)]:
-            for n, filename in lines:
+            for n, filename, status in lines:
                 if lineno == n:
-                    return filename, commands + DEFAULT_COMMANDS
+                    retCommands = copy(commands)
+                    if commands == CHANGED:
+                        if status == 'modified':
+                            retCommands.append(GIT_ADD)
+                        else:
+                            retCommands.append(GIT_RM)
+                    return filename, retCommands + DEFAULT_COMMANDS
         return None, DEFAULT_COMMANDS
 
     def firstlineno(self):
@@ -50,6 +57,7 @@ class GitStatus(object):
             elif line == "# Untracked files:":
                 appendTo = untracked
             if line.startswith("#   ") and not line.startswith("#   ("):
-                filename = line[4:].split(":   ", 1)[-1]
-                appendTo.append((lineno, filename))
+                filename = line[4:].split(":   ", 1)[-1].strip()
+                status = "deleted" if "deleted:" in line else "modified"
+                appendTo.append((lineno, filename, status))
         return cls(staged, changed, untracked)

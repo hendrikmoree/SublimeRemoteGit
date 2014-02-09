@@ -1,9 +1,0 @@
-{
-    "fileTypes": [
-        ""
-    ],
-    "name": "RemoteGitSt",
-    "patterns": [],
-    "scopeName": "source.remote_git_st",
-    "uuid": "ca03e751-04ef-4330-9a6b-9b99aae1c418"
-}

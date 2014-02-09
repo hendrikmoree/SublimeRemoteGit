@@ -3,7 +3,7 @@ from sublime_plugin import TextCommand, WindowCommand
 from sublime import Region, message_dialog
 
 from .classes.gitstatus import GitStatus
-from .commands import GIT_STATUS, GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_COMMIT, GIT_DIFF, GIT_PUSH
+from .commands import GIT_STATUS, GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_COMMIT, GIT_DIFF, GIT_PUSH, GIT_RM
 from .utils import remoteCommand
 
 class RemoteGitSt(TextCommand):
@@ -35,38 +35,43 @@ def replaceView(view, edit, content):
 class RemoteGitCommand(TextCommand):
     def run(self, edit):
         filename, commands = findFilenameAndCommands(self.view)
-        if self.command in commands:
+        command = None
+        for c in commands:
+            if c in self.commands:
+                command = c
+                break
+        if command:
             if self.addFilename and filename:
-                result = remoteCommand(self.view, self.command, filename)
+                result = remoteCommand(self.view, command, filename)
             else:
-                result = remoteCommand(self.view, self.command)
+                result = remoteCommand(self.view, command)
             if not self.showOuput:
                 self.view.run_command("remote_git_st")
             else:
                 replaceView(self.view, edit, result)
 
-class RemoteGitAdd(RemoteGitCommand):
-    command = GIT_ADD
+class RemoteGitStage(RemoteGitCommand):
+    commands = [GIT_ADD, GIT_RM]
     showOuput = False
     addFilename = True
 
 class RemoteGitReset(RemoteGitCommand):
-    command = GIT_RESET
+    commands = [GIT_RESET]
     showOuput = False
     addFilename = True
 
 class RemoteGitCheckout(RemoteGitCommand):
-    command = GIT_CHECKOUT
+    commands = [GIT_CHECKOUT]
     showOuput = False
     addFilename = True
 
 class RemoteGitDiff(RemoteGitCommand):
-    command = GIT_DIFF
+    commands = [GIT_DIFF]
     showOuput = True
     addFilename = True
 
 class RemoteGitPush(RemoteGitCommand):
-    command = GIT_PUSH
+    commands = [GIT_PUSH]
     showOuput = True
     addFilename = False
 

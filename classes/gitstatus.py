@@ -52,7 +52,7 @@ class GitStatus(object):
         for lineno, line in enumerate(message.split("\n")):
             if line == "# Changes to be committed:":
                 appendTo = staged
-            elif line == "# Changes not staged for commit:":
+            elif line == "# Changes not staged for commit:" or line == "# Changed but not updated:":
                 appendTo = changed
             elif line == "# Untracked files:":
                 appendTo = untracked

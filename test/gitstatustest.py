@@ -1,7 +1,7 @@
 
 from unittest import TestCase
-from SublimeRemoteGit.classes.gitstatus import GitStatus
-from SublimeRemoteGit.commands import GIT_PUSH, GIT_RESET, GIT_ADD, GIT_CHECKOUT, GIT_DIFF, GIT_RM, GIT_PULL
+from SublimeRemoteGit.classes.gitstatus import GitStatus, DEFAULT_COMMANDS
+from SublimeRemoteGit.commands import GIT_RESET, GIT_ADD, GIT_CHECKOUT, GIT_DIFF, GIT_RM
 
 class GitStatusTest(TestCase):
 
@@ -31,22 +31,22 @@ class GitStatusTest(TestCase):
 
         filename, commands = gitStatus.fileAndCommandsForLine(4)
         self.assertEqual("setup.py", filename)
-        self.assertEqual([GIT_RESET, GIT_PUSH, GIT_PULL], commands)
+        self.assertEqual([GIT_RESET] + DEFAULT_COMMANDS, commands)
         filename, commands = gitStatus.fileAndCommandsForLine(10)
         self.assertEqual("setup.py", filename)
-        self.assertEqual([GIT_CHECKOUT, GIT_DIFF, GIT_ADD, GIT_PUSH, GIT_PULL], commands)
+        self.assertEqual([GIT_CHECKOUT, GIT_DIFF, GIT_ADD] + DEFAULT_COMMANDS, commands)
         filename, commands = gitStatus.fileAndCommandsForLine(11)
         self.assertEqual("testsetup.py", filename)
-        self.assertEqual([GIT_CHECKOUT, GIT_DIFF, GIT_RM, GIT_PUSH, GIT_PULL], commands)
+        self.assertEqual([GIT_CHECKOUT, GIT_DIFF, GIT_RM] + DEFAULT_COMMANDS, commands)
         filename, commands = gitStatus.fileAndCommandsForLine(12)
         self.assertEqual("test/alltest.sh", filename)
-        self.assertEqual([GIT_CHECKOUT, GIT_DIFF, GIT_ADD, GIT_PUSH, GIT_PULL], commands)
+        self.assertEqual([GIT_CHECKOUT, GIT_DIFF, GIT_ADD] + DEFAULT_COMMANDS, commands)
         filename, commands = gitStatus.fileAndCommandsForLine(17)
         self.assertEqual("test/alltest.py", filename)
-        self.assertEqual([GIT_ADD, GIT_PUSH, GIT_PULL], commands)
+        self.assertEqual([GIT_ADD] + DEFAULT_COMMANDS, commands)
         filename, commands = gitStatus.fileAndCommandsForLine(13)
         self.assertEqual(None, filename)
-        self.assertEqual([GIT_PUSH, GIT_PULL], commands)
+        self.assertEqual(DEFAULT_COMMANDS, commands)
 
         self.assertEqual(4, gitStatus.firstlineno())
         self.assertEqual(10, gitStatus.nextlineno(4))

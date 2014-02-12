@@ -1,0 +1,4 @@
+[
+    { "caption": "RemoteGit: Git push", "command": "remote_git_push" },
+    { "caption": "RemoteGit: Git pull", "command": "remote_git_pull" }
+]

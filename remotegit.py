@@ -1,9 +1,9 @@
 
-from sublime_plugin import TextCommand
+from sublime_plugin import TextCommand, WindowCommand
 from sublime import Region
 
 from .classes.gitstatus import GitStatus
-from .commands import GIT_STATUS, GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_COMMIT, GIT_DIFF, GIT_PUSH, GIT_RM
+from .commands import GIT_STATUS, GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_COMMIT, GIT_DIFF, GIT_PUSH, GIT_RM, GIT_PULL
 from .utils import remoteCommand
 
 class RemoteGitSt(TextCommand):
@@ -15,40 +15,51 @@ class RemoteGitSt(TextCommand):
             replaceView(self.view, edit, result)
             view = self.view
         else:
-            newView = self.view.window().new_file()
-            newView.set_name("RemoteGitSt")
-            newView.set_scratch(True)
-            newView.insert(edit, 0, result)
-            newView.set_read_only(True)
-            newView.settings().set('line_numbers', False)
-            view = newView
-        view.set_syntax_file('Packages/SublimeRemoteGit/RemoteGitSt.tmLanguage')
+            view = createView(self.view.window())
+            replaceView(view, edit, result)
         gitStatus = GitStatus.fromMessage(view.substr(Region(0, view.size())))
         gotoLine(view, gitStatus.firstlineno())
 
+def createView(window):
+    view = window.new_file()
+    view.set_name("RemoteGitSt")
+    view.set_scratch(True)
+    view.settings().set('line_numbers', False)
+    view.set_read_only(True)
+    view.set_syntax_file('Packages/SublimeRemoteGit/RemoteGitSt.tmLanguage')
+    return view
+
 def replaceView(view, edit, content):
+    if view.name != "RemoteGitSt":
+        view = createView(view.window())
     view.set_read_only(False)
     view.erase(edit, Region(0, view.size()))
     view.insert(edit, 0, content)
     view.set_read_only(True)
 
-class RemoteGitCommand(TextCommand):
-    def run(self, edit):
-        filename, commands = findFilenameAndCommands(self.view)
+class ReplaceViewContent(TextCommand):
+    def run(self, edit, content):
+        replaceView(self.view, edit, content)
+
+class RemoteGitCommand(WindowCommand):
+    def run(self):
+        view = self.window.active_view()
+        filename, commands = findFilenameAndCommands(view)
         command = None
         for c in commands:
             if c in self.commands:
                 command = c
                 break
         if command:
+            print("run")
             if self.addFilename and filename:
-                result = remoteCommand(self.view, command, filename)
+                result = remoteCommand(view, command, filename)
             else:
-                result = remoteCommand(self.view, command)
+                result = remoteCommand(view, command)
             if not self.showOuput:
-                self.view.run_command("remote_git_st")
+                view.run_command("remote_git_st")
             else:
-                replaceView(self.view, edit, result)
+                view.run_command("replace_view_content", args=dict(content=result))
 
 class RemoteGitStage(RemoteGitCommand):
     commands = [GIT_ADD, GIT_RM]
@@ -72,6 +83,11 @@ class RemoteGitDiff(RemoteGitCommand):
 
 class RemoteGitPush(RemoteGitCommand):
     commands = [GIT_PUSH]
+    showOuput = True
+    addFilename = False
+
+class RemoteGitPull(RemoteGitCommand):
+    commands = [GIT_PULL]
     showOuput = True
     addFilename = False
 

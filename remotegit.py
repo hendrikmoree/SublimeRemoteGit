@@ -30,7 +30,7 @@ def createView(window):
     return view
 
 def replaceView(view, edit, content):
-    if view.name != "RemoteGitSt":
+    if view.name() != "RemoteGitSt":
         view = createView(view.window())
     view.set_read_only(False)
     view.erase(edit, Region(0, view.size()))
@@ -51,7 +51,6 @@ class RemoteGitCommand(WindowCommand):
                 command = c
                 break
         if command:
-            print("run")
             if self.addFilename and filename:
                 result = remoteCommand(view, command, filename)
             else:

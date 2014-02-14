@@ -6,34 +6,37 @@ from .classes.gitstatus import GitStatus
 from .commands import GIT_STATUS, GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_COMMIT, GIT_DIFF, GIT_PUSH, GIT_RM, GIT_PULL
 from .utils import remoteCommand
 
+VIEW_PREFIX = "RemoteGit"
+ST_VIEW_NAME = "%sSt" % VIEW_PREFIX
+
 class RemoteGitSt(TextCommand):
-    def run(self, edit, toLine=None):
+    def run(self, edit):
         result = remoteCommand(self.view, GIT_STATUS)
         # result += remoteCommand(self.view, GIT_DIFF)
 
-        if self.view.name() == "RemoteGitSt":
+        if self.view.name().startswith(VIEW_PREFIX):
             replaceView(self.view, edit, result)
             view = self.view
         else:
             view = createView(self.view.window())
             replaceView(view, edit, result)
         gitStatus = GitStatus.fromMessage(view.substr(Region(0, view.size())))
-        if toLine is None:
-            toLine = gitStatus.firstlineno()
+        toLine = getattr(self.view, "lastlineno", gitStatus.firstlineno())
         gotoLine(view, gitStatus.closestLineNo(toLine))
 
-def createView(window):
+def createView(window, name=ST_VIEW_NAME):
     view = window.new_file()
-    view.set_name("RemoteGitSt")
+    view.set_name(name)
     view.set_scratch(True)
     view.settings().set('line_numbers', False)
     view.set_read_only(True)
     view.set_syntax_file('Packages/SublimeRemoteGit/RemoteGitSt.tmLanguage')
     return view
 
-def replaceView(view, edit, content):
-    if view.name() != "RemoteGitSt":
-        view = createView(view.window())
+def replaceView(view, edit, content, name=ST_VIEW_NAME):
+    if not view.name().startswith(VIEW_PREFIX):
+        view = createView(view.window(), name=name)
+    view.set_name(name)
     view.set_read_only(False)
     view.erase(edit, Region(0, view.size()))
     view.insert(edit, 0, content)
@@ -41,7 +44,7 @@ def replaceView(view, edit, content):
 
 class ReplaceViewContent(TextCommand):
     def run(self, edit, content):
-        replaceView(self.view, edit, content)
+        replaceView(self.view, edit, content, name=VIEW_PREFIX)
 
 class RemoteGitCommand(WindowCommand):
     def run(self):
@@ -58,7 +61,7 @@ class RemoteGitCommand(WindowCommand):
             else:
                 result = remoteCommand(view, command)
             if not self.showOuput:
-                view.run_command("remote_git_st", args=dict(toLine=currentLineNo(view)))
+                view.run_command("remote_git_st")
             else:
                 view.run_command("replace_view_content", args=dict(content=result))
 
@@ -105,8 +108,11 @@ class RemoteGitCommit(TextCommand):
 
 class RemoteGitChangeLine(TextCommand):
     def run(self, edit, up=False):
+        if self.view.name() != ST_VIEW_NAME:
+            return
         gitStatus = GitStatus.fromMessage(self.view.substr(Region(0, self.view.size())))
         gotoLine(self.view, gitStatus.nextlineno(currentLineNo(self.view), up))
+        self.view.lastlineno = currentLineNo(self.view)
 
 def currentLineNo(view):
     currentLineNo, _ = view.rowcol(view.sel()[0].a)

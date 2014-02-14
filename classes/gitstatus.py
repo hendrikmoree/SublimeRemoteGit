@@ -38,9 +38,9 @@ class GitStatus(object):
         except IndexError:
             return self._linenos[0]
         except ValueError:
-            return self._closestLineNo(currentLineNo)
+            return self.closestLineNo(currentLineNo)
 
-    def _closestLineNo(self, currentLineNo):
+    def closestLineNo(self, currentLineNo):
         return min(self._linenos, key=lambda x: abs(x - currentLineNo))
 
     @classmethod

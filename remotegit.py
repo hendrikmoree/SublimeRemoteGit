@@ -7,7 +7,7 @@ from .commands import GIT_STATUS, GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_COMMIT, 
 from .utils import remoteCommand
 
 class RemoteGitSt(TextCommand):
-    def run(self, edit):
+    def run(self, edit, toLine=None):
         result = remoteCommand(self.view, GIT_STATUS)
         # result += remoteCommand(self.view, GIT_DIFF)
 
@@ -18,7 +18,9 @@ class RemoteGitSt(TextCommand):
             view = createView(self.view.window())
             replaceView(view, edit, result)
         gitStatus = GitStatus.fromMessage(view.substr(Region(0, view.size())))
-        gotoLine(view, gitStatus.firstlineno())
+        if toLine is None:
+            toLine = gitStatus.firstlineno()
+        gotoLine(view, gitStatus.closestLineNo(toLine))
 
 def createView(window):
     view = window.new_file()
@@ -56,7 +58,7 @@ class RemoteGitCommand(WindowCommand):
             else:
                 result = remoteCommand(view, command)
             if not self.showOuput:
-                view.run_command("remote_git_st")
+                view.run_command("remote_git_st", args=dict(toLine=currentLineNo(view)))
             else:
                 view.run_command("replace_view_content", args=dict(content=result))
 
@@ -103,9 +105,13 @@ class RemoteGitCommit(TextCommand):
 
 class RemoteGitChangeLine(TextCommand):
     def run(self, edit, up=False):
-        currentLineNo, _ = self.view.rowcol(self.view.sel()[0].a)
         gitStatus = GitStatus.fromMessage(self.view.substr(Region(0, self.view.size())))
-        gotoLine(self.view, gitStatus.nextlineno(currentLineNo, up))
+        gotoLine(self.view, gitStatus.nextlineno(currentLineNo(self.view), up))
+
+def currentLineNo(view):
+    currentLineNo, _ = view.rowcol(view.sel()[0].a)
+    return currentLineNo
+
 
 def findFilenameAndCommands(view):
     row, col = view.rowcol(view.sel()[0].a)

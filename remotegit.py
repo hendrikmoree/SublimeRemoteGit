@@ -3,7 +3,7 @@ from sublime_plugin import TextCommand, WindowCommand
 from sublime import Region
 
 from .classes.gitstatus import GitStatus
-from .commands import GIT_STATUS, GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_COMMIT, GIT_DIFF, GIT_PUSH, GIT_RM, GIT_PULL
+from .commands import GIT_STATUS, GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_COMMIT, GIT_DIFF, GIT_PUSH, GIT_RM, GIT_PULL, GIT_CHECKOUT_BRANCH
 from .utils import remoteCommand
 
 VIEW_PREFIX = "RemoteGit"
@@ -105,6 +105,13 @@ class RemoteGitCommit(TextCommand):
     def commit(self, message):
         remoteCommand(self.view, GIT_COMMIT, message)
         self.view.run_command("remote_git_st")
+
+class RemoteGitCheckoutBranch(TextCommand):
+    def run(self, edit):
+        self.view.window().show_input_panel("Branch name: ", "", self.checkout, None, None)
+
+    def checkout(self, name):
+        remoteCommand(self.view, GIT_CHECKOUT_BRANCH, name)
 
 class RemoteGitChangeLine(TextCommand):
     def run(self, edit, up=False):

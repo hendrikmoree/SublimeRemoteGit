@@ -112,6 +112,7 @@ class _RemoteGitBranchCommand(TextCommand):
 
     def checkout(self, name):
         remoteCommand(self.view, self.command, name)
+        self.view.run_command("remote_git_st")
 
 class RemoteGitCheckoutBranch(_RemoteGitBranchCommand):
     command = GIT_CHECKOUT_BRANCH

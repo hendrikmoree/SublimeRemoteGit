@@ -3,8 +3,8 @@ from sublime_plugin import TextCommand, WindowCommand
 from sublime import Region
 
 from .classes.gitstatus import GitStatus
-from .commands import GIT_STATUS, GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_COMMIT, GIT_DIFF, GIT_PUSH, GIT_RM, GIT_PULL, GIT_CHECKOUT_BRANCH, GIT_CHECKOUT_NEW_BRANCH, GIT_MERGE_BRANCH, GIT_LIST_BRANCH
-from .utils import remoteCommand, currentLineNo, gotoLine, findFilenameAndCommands, replaceView, createView
+from .commands import GIT_STATUS, GIT_COMMIT, GIT_DIFF, GIT_CHECKOUT_BRANCH, GIT_CHECKOUT_NEW_BRANCH, GIT_MERGE_BRANCH, GIT_LIST_BRANCH
+from .utils import remoteCommand, currentLineNo, gotoLine, replaceView, createView
 from .constants import ST_VIEW_NAME, VIEW_PREFIX
 
 class RemoteGitSt(TextCommand):
@@ -25,55 +25,6 @@ class RemoteGitSt(TextCommand):
 class ReplaceViewContent(TextCommand):
     def run(self, edit, content):
         replaceView(self.view, edit, content, name=VIEW_PREFIX)
-
-class RemoteGitCommand(WindowCommand):
-    def run(self):
-        view = self.window.active_view()
-        filename, commands = findFilenameAndCommands(view)
-        command = None
-        for c in commands:
-            if c in self.commands:
-                command = c
-                break
-        if command:
-            if self.addFilename and filename:
-                result = remoteCommand(view, command, filename)
-            else:
-                result = remoteCommand(view, command)
-            if not self.showOuput:
-                view.run_command("remote_git_st")
-            else:
-                view.run_command("replace_view_content", args=dict(content=result))
-
-class RemoteGitStage(RemoteGitCommand):
-    commands = [GIT_ADD, GIT_RM]
-    showOuput = False
-    addFilename = True
-
-class RemoteGitReset(RemoteGitCommand):
-    commands = [GIT_RESET]
-    showOuput = False
-    addFilename = True
-
-class RemoteGitCheckout(RemoteGitCommand):
-    commands = [GIT_CHECKOUT]
-    showOuput = False
-    addFilename = True
-
-class RemoteGitDiff(RemoteGitCommand):
-    commands = [GIT_DIFF]
-    showOuput = True
-    addFilename = True
-
-class RemoteGitPush(RemoteGitCommand):
-    commands = [GIT_PUSH]
-    showOuput = True
-    addFilename = False
-
-class RemoteGitPull(RemoteGitCommand):
-    commands = [GIT_PULL]
-    showOuput = True
-    addFilename = False
 
 class RemoteGitCommit(TextCommand):
     def run(self, edit):

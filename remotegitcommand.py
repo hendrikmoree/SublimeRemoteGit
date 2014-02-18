@@ -2,7 +2,7 @@ from sublime_plugin import WindowCommand
 from .utils import remoteCommand, findFilenameAndCommands
 from .commands import GIT_ADD, GIT_RM, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH, GIT_PULL
 
-class RemoteGitCommand(WindowCommand):
+class _RemoteGitCommand(WindowCommand):
     def run(self):
         view = self.window.active_view()
         filename, commands = findFilenameAndCommands(view)
@@ -21,32 +21,32 @@ class RemoteGitCommand(WindowCommand):
             else:
                 view.run_command("replace_view_content", args=dict(content=result))
 
-class RemoteGitStage(RemoteGitCommand):
+class RemoteGitStage(_RemoteGitCommand):
     commands = [GIT_ADD, GIT_RM]
     showOuput = False
     addFilename = True
 
-class RemoteGitReset(RemoteGitCommand):
+class RemoteGitReset(_RemoteGitCommand):
     commands = [GIT_RESET]
     showOuput = False
     addFilename = True
 
-class RemoteGitCheckout(RemoteGitCommand):
+class RemoteGitCheckout(_RemoteGitCommand):
     commands = [GIT_CHECKOUT]
     showOuput = False
     addFilename = True
 
-class RemoteGitDiff(RemoteGitCommand):
+class RemoteGitDiff(_RemoteGitCommand):
     commands = [GIT_DIFF]
     showOuput = True
     addFilename = True
 
-class RemoteGitPush(RemoteGitCommand):
+class RemoteGitPush(_RemoteGitCommand):
     commands = [GIT_PUSH]
     showOuput = True
     addFilename = False
 
-class RemoteGitPull(RemoteGitCommand):
+class RemoteGitPull(_RemoteGitCommand):
     commands = [GIT_PULL]
     showOuput = True
     addFilename = False

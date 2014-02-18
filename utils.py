@@ -3,6 +3,7 @@ from os.path import abspath, dirname
 from .classes.gitstatus import GitStatus
 from .constants import ST_VIEW_NAME, VIEW_PREFIX
 from sublime import Region
+from sublime_plugin import TextCommand
 
 mydir = abspath(dirname(__file__))
 
@@ -47,6 +48,11 @@ def createView(window, name=ST_VIEW_NAME):
     view.set_read_only(True)
     view.set_syntax_file('Packages/SublimeRemoteGit/RemoteGitSt.tmLanguage')
     return view
+
+
+class ReplaceViewContent(TextCommand):
+    def run(self, edit, content):
+        replaceView(self.view, edit, content, name=VIEW_PREFIX)
 
 def replaceView(view, edit, content, name=ST_VIEW_NAME):
     if not view.name().startswith(VIEW_PREFIX):

@@ -1,6 +1,6 @@
-from sublime_plugin import WindowCommand
-from .utils import remoteCommand, findFilenameAndCommands
-from .commands import GIT_ADD, GIT_RM, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH, GIT_PULL
+from sublime_plugin import WindowCommand, TextCommand
+from .utils import remoteCommand, findFilenameAndCommands, replaceView
+from .commands import GIT_ADD, GIT_RM, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH, GIT_PULL, GIT_COMMIT, GIT_STATUS
 
 class _RemoteGitCommand(WindowCommand):
     def run(self):
@@ -50,3 +50,14 @@ class RemoteGitPull(_RemoteGitCommand):
     commands = [GIT_PULL]
     showOuput = True
     addFilename = False
+
+class RemoteGitCommit(TextCommand):
+    def run(self, edit):
+        result = remoteCommand(self.view, GIT_STATUS)
+        result += remoteCommand(self.view, GIT_DIFF, "--staged")
+        replaceView(self.view, edit, result)
+        self.view.window().show_input_panel("Commit message: ", "", self.commit, None, None)
+
+    def commit(self, message):
+        remoteCommand(self.view, GIT_COMMIT, message)
+        self.view.run_command("remote_git_st")

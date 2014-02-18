@@ -3,11 +3,9 @@ from sublime_plugin import TextCommand, WindowCommand
 from sublime import Region
 
 from .classes.gitstatus import GitStatus
-from .commands import GIT_STATUS, GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_COMMIT, GIT_DIFF, GIT_PUSH, GIT_RM, GIT_PULL, GIT_CHECKOUT_BRANCH, GIT_CHECKOUT_NEW_BRANCH, GIT_MERGE_BRANCH
-from .utils import remoteCommand
-
-VIEW_PREFIX = "RemoteGit"
-ST_VIEW_NAME = "%sSt" % VIEW_PREFIX
+from .commands import GIT_STATUS, GIT_ADD, GIT_RESET, GIT_CHECKOUT, GIT_COMMIT, GIT_DIFF, GIT_PUSH, GIT_RM, GIT_PULL, GIT_CHECKOUT_BRANCH, GIT_CHECKOUT_NEW_BRANCH, GIT_MERGE_BRANCH, GIT_LIST_BRANCH
+from .utils import remoteCommand, currentLineNo, gotoLine, findFilenameAndCommands, replaceView, createView
+from .constants import ST_VIEW_NAME, VIEW_PREFIX
 
 class RemoteGitSt(TextCommand):
     def run(self, edit):
@@ -23,24 +21,6 @@ class RemoteGitSt(TextCommand):
         gitStatus = GitStatus.fromMessage(view.substr(Region(0, view.size())))
         toLine = getattr(self.view, "lastlineno", gitStatus.firstlineno())
         gotoLine(view, gitStatus.closestLineNo(toLine))
-
-def createView(window, name=ST_VIEW_NAME):
-    view = window.new_file()
-    view.set_name(name)
-    view.set_scratch(True)
-    view.settings().set('line_numbers', False)
-    view.set_read_only(True)
-    view.set_syntax_file('Packages/SublimeRemoteGit/RemoteGitSt.tmLanguage')
-    return view
-
-def replaceView(view, edit, content, name=ST_VIEW_NAME):
-    if not view.name().startswith(VIEW_PREFIX):
-        view = createView(view.window(), name=name)
-    view.set_name(name)
-    view.set_read_only(False)
-    view.erase(edit, Region(0, view.size()))
-    view.insert(edit, 0, content)
-    view.set_read_only(True)
 
 class ReplaceViewContent(TextCommand):
     def run(self, edit, content):
@@ -108,7 +88,11 @@ class RemoteGitCommit(TextCommand):
 
 class _RemoteGitBranchCommand(TextCommand):
     def run(self, edit):
-        self.view.window().show_input_panel("Branch name: ", "", self.checkout, None, None)
+        if self.choose:
+            branches = [b.strip() for b in remoteCommand(self.view, GIT_LIST_BRANCH).strip().split('\n') if not b.startswith('*')]
+            self.view.window().show_quick_panel(branches, lambda x: self.checkout(branches[x]) if x != -1 else None)
+        else:
+            self.view.window().show_input_panel("Branch name: ", "", self.checkout, None, None)
 
     def checkout(self, name):
         remoteCommand(self.view, self.command, name)
@@ -116,12 +100,15 @@ class _RemoteGitBranchCommand(TextCommand):
 
 class RemoteGitCheckoutBranch(_RemoteGitBranchCommand):
     command = GIT_CHECKOUT_BRANCH
+    choose = True
 
 class RemoteGitCheckoutNewBranch(_RemoteGitBranchCommand):
     command = GIT_CHECKOUT_NEW_BRANCH
+    choose = False
 
 class RemoteGitMergeBranch(_RemoteGitBranchCommand):
     command = GIT_MERGE_BRANCH
+    choose = True
 
 class RemoteGitChangeLine(TextCommand):
     def run(self, edit, up=False):
@@ -135,20 +122,3 @@ class RemoteGitHelp(WindowCommand):
     def run(self):
         items = ['a (git add or git rm if deleted)', 'r (git reset HEAD)', 'c (git checkout)', 'm (git commit)', 'p (git push)', 'l (git pull)', 'd (git diff)']
         self.window.show_quick_panel(items, lambda x: None)
-
-def currentLineNo(view):
-    currentLineNo, _ = view.rowcol(view.sel()[0].a)
-    return currentLineNo
-
-
-def findFilenameAndCommands(view):
-    row, col = view.rowcol(view.sel()[0].a)
-    gitStatus = GitStatus.fromMessage(view.substr(Region(0, view.size())))
-    return gitStatus.fileAndCommandsForLine(row)
-
-def gotoLine(view, lineno):
-    textPoint = view.text_point(lineno, 0)
-    pointRegion = Region(textPoint, textPoint)
-    view.sel().clear()
-    view.sel().add(pointRegion)
-    view.show(pointRegion)

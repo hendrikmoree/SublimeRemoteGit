@@ -138,14 +138,6 @@
 			<key>name</key>
 			<string>markup.deleted.diff</string>
 		</dict>
-		<dict>
-			<key>begin</key>
-			<string>^commit</string>
-			<key>end</key>
-			<string>$</string>
-			<key>name</key>
-			<string>markup.changed.diff</string>
-		</dict>
     </array>
 	<key>scopeName</key>
 	<string>source.remote_git_st</string>

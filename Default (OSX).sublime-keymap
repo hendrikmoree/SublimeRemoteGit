@@ -18,13 +18,13 @@
     { "keys": ["d"], "command": "remote_git_diff", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
     ]},
-    { "keys": ["q"], "command": "remote_git_st", "context": [
+    { "keys": ["q"], "command": "remote_git_back", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
     ]},
-    { "keys": ["down"], "command": "remote_git_change_line", "context": [
+    { "keys": ["down"], "command": "remote_git_status_change_line", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
     ]},
-    { "keys": ["up"], "command": "remote_git_change_line", "args": {"up": true}, "context": [
+    { "keys": ["up"], "command": "remote_git_status_change_line", "args": {"up": true}, "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
     ]},
     { "keys": ["?"], "command": "remote_git_status_help", "context": [
@@ -39,7 +39,16 @@
     { "keys": ["p"], "command": "remote_git_log", "args": {"patch": true}, "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_log"}
     ]},
-    { "keys": ["q"], "command": "remote_git_st", "context": [
+    { "keys": ["q"], "command": "remote_git_back", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_log"}
-    ]}
+    ]},
+    { "keys": ["down"], "command": "remote_git_log_change_line", "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_log"}
+    ]},
+    { "keys": ["up"], "command": "remote_git_log_change_line", "args": {"up": true}, "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_log"}
+    ]},
+    { "keys": ["enter"], "command": "remote_git_show_commit", "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_log"}
+    ]},
 ]

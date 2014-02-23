@@ -11,7 +11,7 @@ lastCommandFile = join(mydir, "last-command")
 
 def remoteCommand(view, command):
     args = ["bash", "remote_command.sh", projectRoot(view)] + command.asList()
-    open(lastCommandFile, 'w').write(command.asString())
+    open(lastCommandFile, 'a').write(command.asString() + '\n')
     proc = Popen(' '.join(args), cwd=mydir, stdout=PIPE, stderr=PIPE, stdin=PIPE, shell=True)
     stdout, stderr = proc.communicate(timeout=2)
     return stderr.decode('utf-8') + stdout.decode('utf-8')
@@ -25,9 +25,12 @@ def projectRoot(view):
     elif view.window() and view.window().folders():
         return view.window().folders()[0]
 
-def lastCommand():
+def lastCommand(historyIndex=0):
     if isfile(lastCommandFile):
-        return GitCommand.fromString(open(lastCommandFile).read())
+        lastCommands = open(lastCommandFile).readlines()
+        if len(lastCommands) > 5:
+            open(lastCommandFile, 'w').write(''.join(lastCommands[-5:]))
+        return GitCommand.fromString(lastCommands[-historyIndex].strip())
     else:
         return GitCommand(GIT_STATUS)
 
@@ -40,12 +43,16 @@ def findFilenameAndCommands(view):
     gitStatus = GitStatus.fromMessage(view.substr(Region(0, view.size())))
     return gitStatus.fileAndCommandsForLine(row)
 
-def gotoLine(view, lineno):
+def gotoLine(view, lineno, atTop=False):
     textPoint = view.text_point(lineno, 0)
     pointRegion = Region(textPoint, textPoint)
     view.sel().clear()
     view.sel().add(pointRegion)
-    view.show(pointRegion)
+    if not atTop:
+        view.show(pointRegion)
+    else:
+        top_offset = (lineno - 1) * view.line_height()
+        view.set_viewport_position((0, top_offset), True)
 
 def createView(window, name=ST_VIEW_NAME):
     view = window.new_file()

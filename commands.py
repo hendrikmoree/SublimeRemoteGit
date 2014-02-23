@@ -13,6 +13,7 @@ GIT_PUSH = "git push"
 GIT_PULL = "git pull"
 GIT_LIST_BRANCH = "git branch -l"
 GIT_LOG = "git log"
+GIT_SHOW = "git show"
 
 class GitCommand(object):
     def __init__(self, command, value=None):

@@ -1,6 +1,6 @@
 from .utils import remoteCommand
 from sublime_plugin import TextCommand
-from .commands import GitCommand, GIT_CHECKOUT_BRANCH, GIT_CHECKOUT_NEW_BRANCH, GIT_MERGE_BRANCH, GIT_LIST_BRANCH
+from .commands import GitCommand, GIT_CHECKOUT_BRANCH, GIT_CHECKOUT_NEW_BRANCH, GIT_MERGE_BRANCH, GIT_LIST_BRANCH, GIT_REMOVE_BRANCH
 
 class _RemoteGitBranchCommand(TextCommand):
     def run(self, edit):
@@ -26,3 +26,6 @@ class RemoteGitMergeBranch(_RemoteGitBranchCommand):
     command = GIT_MERGE_BRANCH
     choose = True
 
+class RemoteGitRemoveBranch(_RemoteGitBranchCommand):
+    command = GIT_REMOVE_BRANCH
+    choose = True

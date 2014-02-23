@@ -28,7 +28,7 @@ class RemoteGitChangeLine(TextCommand):
         gotoLine(self.view, gitStatus.nextlineno(currentLineNo(self.view), up))
         self.view.lastlineno = currentLineNo(self.view)
 
-class RemoteGitHelp(WindowCommand):
+class RemoteGitStatusHelp(WindowCommand):
     def run(self):
         items = ['a (git add or git rm if deleted)', 'r (git reset HEAD)', 'c (git checkout)', 'm (git commit)', 'p (git push)', 'd (git diff)', 'l (git log)']
         self.window.show_quick_panel(items, lambda x: None)

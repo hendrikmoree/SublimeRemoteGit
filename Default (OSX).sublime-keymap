@@ -27,8 +27,11 @@
     { "keys": ["up"], "command": "remote_git_change_line", "args": {"up": true}, "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
     ]},
-    { "keys": ["?"], "command": "remote_git_help", "context": [
+    { "keys": ["?"], "command": "remote_git_status_help", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
+    ]},
+    { "keys": ["?"], "command": "remote_git_log_help", "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_log"}
     ]},
     { "keys": ["l"], "command": "remote_git_log", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
@@ -37,6 +40,6 @@
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_log"}
     ]},
     { "keys": ["q"], "command": "remote_git_st", "context": [
-        {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
-    ]},
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_log"}
+    ]}
 ]

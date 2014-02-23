@@ -16,3 +16,8 @@ class RemoteGitLog(WindowCommand):
             command.addOption('-p')
         result = remoteCommand(view, command)
         view.run_command("replace_view_content", args=dict(content=result, name=LOG_VIEW_NAME))
+
+class RemoteGitLogHelp(WindowCommand):
+    def run(self):
+        items = ['p (patch of this log)']
+        self.window.show_quick_panel(items, lambda x: None)

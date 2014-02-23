@@ -3,13 +3,13 @@ from sublime_plugin import TextCommand, WindowCommand
 from sublime import Region
 
 from .classes.gitstatus import GitStatus
-from .commands import GIT_STATUS
+from .commands import GIT_STATUS, GitCommand
 from .utils import remoteCommand, currentLineNo, gotoLine, replaceView, createView
 from .constants import ST_VIEW_NAME, VIEW_PREFIX
 
 class RemoteGitSt(TextCommand):
     def run(self, edit):
-        result = remoteCommand(self.view, GIT_STATUS)
+        result = remoteCommand(self.view, GitCommand(GIT_STATUS))
         if self.view.name().startswith(VIEW_PREFIX):
             replaceView(self.view, edit, result)
             view = self.view
@@ -30,5 +30,5 @@ class RemoteGitChangeLine(TextCommand):
 
 class RemoteGitHelp(WindowCommand):
     def run(self):
-        items = ['a (git add or git rm if deleted)', 'r (git reset HEAD)', 'c (git checkout)', 'm (git commit)', 'p (git push)', 'l (git pull)', 'd (git diff)']
+        items = ['a (git add or git rm if deleted)', 'r (git reset HEAD)', 'c (git checkout)', 'm (git commit)', 'p (git push)', 'd (git diff)', 'l (git log)']
         self.window.show_quick_panel(items, lambda x: None)

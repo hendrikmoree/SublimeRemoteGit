@@ -7,10 +7,9 @@ from sublime_plugin import TextCommand
 
 mydir = abspath(dirname(__file__))
 
-def remoteCommand(view, command, option=None):
-    args = ["bash", "remote_command.sh", projectRoot(view), '"%s"' % command]
-    if option:
-        args.append('"%s"' % option)
+def remoteCommand(view, command):
+    args = ["bash", "remote_command.sh", projectRoot(view)] + command.asList()
+    print (args)
     proc = Popen(' '.join(args), cwd=mydir, stdout=PIPE, stderr=PIPE, stdin=PIPE, shell=True)
     stdout, stderr = proc.communicate(timeout=2)
     return stderr.decode('utf-8') + stdout.decode('utf-8')
@@ -46,13 +45,14 @@ def createView(window, name=ST_VIEW_NAME):
     view.set_scratch(True)
     view.settings().set('line_numbers', False)
     view.set_read_only(True)
-    view.set_syntax_file('Packages/SublimeRemoteGit/RemoteGitSt.tmLanguage')
+    view.set_syntax_file('Packages/SublimeRemoteGit/%s.tmLanguage' % name)
     return view
 
 
 class ReplaceViewContent(TextCommand):
-    def run(self, edit, content):
-        replaceView(self.view, edit, content, name=VIEW_PREFIX)
+    def run(self, edit, content, **arguments):
+        name = arguments.get('name', VIEW_PREFIX)
+        replaceView(self.view, edit, content, name=name)
 
 def replaceView(view, edit, content, name=ST_VIEW_NAME):
     if not view.name().startswith(VIEW_PREFIX):
@@ -62,3 +62,4 @@ def replaceView(view, edit, content, name=ST_VIEW_NAME):
     view.erase(edit, Region(0, view.size()))
     view.insert(edit, 0, content)
     view.set_read_only(True)
+    view.set_syntax_file('Packages/SublimeRemoteGit/%s.tmLanguage' % name)

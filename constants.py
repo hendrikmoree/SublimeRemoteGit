@@ -1,2 +1,3 @@
 VIEW_PREFIX = "RemoteGit"
 ST_VIEW_NAME = "%sSt" % VIEW_PREFIX
+LOG_VIEW_NAME = "%sLog" % VIEW_PREFIX

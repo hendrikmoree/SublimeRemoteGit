@@ -3,5 +3,6 @@
     { "caption": "RemoteGit: Git pull", "command": "remote_git_pull" },
     { "caption": "RemoteGit: Checkout branch", "command": "remote_git_checkout_branch"},
     { "caption": "RemoteGit: Checkout new branch", "command": "remote_git_checkout_new_branch"},
-    { "caption": "RemoteGit: Merge branch", "command": "remote_git_merge_branch"}
+    { "caption": "RemoteGit: Merge branch", "command": "remote_git_merge_branch"},
+    { "caption": "RemoteGit: Git log with patch", "command": "remote_git_log", "args": {"patch": true}}
 ]

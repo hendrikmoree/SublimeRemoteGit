@@ -15,9 +15,6 @@
     { "keys": ["p"], "command": "remote_git_push", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
     ]},
-    { "keys": ["l"], "command": "remote_git_pull", "context": [
-        {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
-    ]},
     { "keys": ["d"], "command": "remote_git_diff", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
     ]},
@@ -32,6 +29,14 @@
     ]},
     { "keys": ["?"], "command": "remote_git_help", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
-    ]}
-
+    ]},
+    { "keys": ["l"], "command": "remote_git_log", "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
+    ]},
+    { "keys": ["p"], "command": "remote_git_log", "args": {"patch": true}, "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_log"}
+    ]},
+    { "keys": ["q"], "command": "remote_git_st", "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
+    ]},
 ]

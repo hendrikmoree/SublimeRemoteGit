@@ -7,7 +7,7 @@
 		<string></string>
 	</array>
 	<key>name</key>
-	<string>RemoteGitSt</string>
+	<string>RemoteGitLog</string>
 	<key>patterns</key>
 	<array>
 		<dict>
@@ -148,7 +148,7 @@
 		</dict>
     </array>
 	<key>scopeName</key>
-	<string>source.remote_git_st</string>
+	<string>source.remote_git_log</string>
 	<key>uuid</key>
 	<string>ca03e751-04ef-4330-9a6b-9b99aae1c418</string>
 </dict>

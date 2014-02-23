@@ -9,6 +9,8 @@ class _RemoteGitCommand(WindowCommand):
     def run(self, **kwargs):
         view = self.window.active_view()
         filename, commands = findFilenameAndCommands(view)
+        if self.addFilename and filename is None:
+            filename = view.file_name()
         command = None
         for c in commands:
             if c in self.commands:

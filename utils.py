@@ -1,14 +1,16 @@
 from subprocess import Popen, PIPE
-from os.path import abspath, dirname
+from os.path import abspath, dirname, join
 from .classes.gitstatus import GitStatus
 from .constants import ST_VIEW_NAME, VIEW_PREFIX
 from sublime import Region
 from sublime_plugin import TextCommand
 
 mydir = abspath(dirname(__file__))
+lastCommandFile = join(mydir, "last-command")
 
 def remoteCommand(view, command):
     args = ["bash", "remote_command.sh", projectRoot(view)] + command.asList()
+    open(lastCommandFile, 'w').write(command.asString())
     proc = Popen(' '.join(args), cwd=mydir, stdout=PIPE, stderr=PIPE, stdin=PIPE, shell=True)
     stdout, stderr = proc.communicate(timeout=2)
     return stderr.decode('utf-8') + stdout.decode('utf-8')

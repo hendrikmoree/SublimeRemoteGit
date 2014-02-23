@@ -1,10 +1,12 @@
 from sublime_plugin import WindowCommand, TextCommand
-from .utils import remoteCommand, findFilenameAndCommands, replaceView
+from .utils import remoteCommand, findFilenameAndCommands, replaceView, lastCommand
 from .commands import GitCommand, GIT_ADD, GIT_RM, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH, GIT_PULL, GIT_COMMIT, GIT_STATUS, GIT_LOG
 from .constants import ST_VIEW_NAME, LOG_VIEW_NAME
 
 class _RemoteGitCommand(WindowCommand):
     viewName = ST_VIEW_NAME
+    showOuput = False
+    addFilename = True
 
     def run(self, **kwargs):
         view = self.window.active_view()
@@ -29,23 +31,16 @@ class _RemoteGitCommand(WindowCommand):
 
 class RemoteGitStage(_RemoteGitCommand):
     commands = [GIT_ADD, GIT_RM]
-    showOuput = False
-    addFilename = True
 
 class RemoteGitReset(_RemoteGitCommand):
     commands = [GIT_RESET]
-    showOuput = False
-    addFilename = True
 
 class RemoteGitCheckout(_RemoteGitCommand):
     commands = [GIT_CHECKOUT]
-    showOuput = False
-    addFilename = True
 
 class RemoteGitDiff(_RemoteGitCommand):
     commands = [GIT_DIFF]
     showOuput = True
-    addFilename = True
 
 class RemoteGitPush(_RemoteGitCommand):
     commands = [GIT_PUSH]
@@ -57,12 +52,25 @@ class RemoteGitPull(_RemoteGitCommand):
     showOuput = True
     addFilename = False
 
-class RemoteGitLog(_RemoteGitCommand):
+class RemoteGitLog(WindowCommand):
+    def run(self, **kwargs):
+        view = self.window.active_view()
+        filename, commands = findFilenameAndCommands(view)
+        if view.name() == LOG_VIEW_NAME:
+            filename = lastCommand().value
+        elif filename is None:
+            filename = view.file_name()
+        command = GitCommand(GIT_LOG, filename)
+        if kwargs.get('patch') == True:
+            command.addOption('-p')
+        result = remoteCommand(view, command)
+        view.run_command("replace_view_content", args=dict(content=result, name=LOG_VIEW_NAME))
+
     commands = [GIT_LOG]
     showOuput = True
-    addFilename = True
     kwargs = {'patch': '-p'}
     viewName = LOG_VIEW_NAME
+    extraFunction = lambda self, filename: lastCommand().value
 
 class RemoteGitCommit(TextCommand):
     def run(self, edit):

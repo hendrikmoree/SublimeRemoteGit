@@ -1,7 +1,8 @@
 from subprocess import Popen, PIPE
-from os.path import abspath, dirname, join
+from os.path import abspath, dirname, join, isfile
 from .classes.gitstatus import GitStatus
 from .constants import ST_VIEW_NAME, VIEW_PREFIX
+from .commands import GitCommand, GIT_STATUS
 from sublime import Region
 from sublime_plugin import TextCommand
 
@@ -23,6 +24,12 @@ def projectRoot(view):
                 return folder
     elif view.window() and view.window().folders():
         return view.window().folders()[0]
+
+def lastCommand():
+    if isfile(lastCommandFile):
+        return GitCommand.fromString(open(lastCommandFile).read())
+    else:
+        return GitCommand(GIT_STATUS)
 
 def currentLineNo(view):
     currentLineNo, _ = view.rowcol(view.sel()[0].a)

@@ -3,13 +3,13 @@ from .utils import remoteCommand, findFilenameAndCommands, replaceView
 from .commands import GitCommand, GIT_ADD, GIT_RM, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH, GIT_PULL, GIT_COMMIT, GIT_STATUS
 from .constants import ST_VIEW_NAME
 
-class _RemoteGitCommand(WindowCommand):
+class _RemoteGitCommand(TextCommand):
     viewName = ST_VIEW_NAME
     showOuput = False
     addFilename = True
 
-    def run(self, **kwargs):
-        view = self.window.active_view()
+    def run(self, edit, **kwargs):
+        view = self.view
         filename, commands = findFilenameAndCommands(view)
         if self.addFilename and filename is None:
             filename = view.file_name()

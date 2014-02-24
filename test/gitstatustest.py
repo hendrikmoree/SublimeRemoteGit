@@ -63,3 +63,11 @@ class GitStatusTest(TestCase):
         self.assertEqual(4, gitStatus.nextlineno(0, True))
         self.assertEqual(4, gitStatus.nextlineno(1, True))
         self.assertEqual(10, gitStatus.nextlineno(8, True))
+
+    def testParseAllClean(self):
+        gitStatus = GitStatus.fromMessage("""# On branch master
+nothing to commit, working directory clean""")
+        self.assertEquals([], gitStatus.staged)
+        self.assertEquals([], gitStatus.changed)
+        self.assertEquals([], gitStatus.untracked)
+        self.assertEquals(None, gitStatus.firstlineno())

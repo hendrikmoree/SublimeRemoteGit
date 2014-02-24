@@ -29,7 +29,7 @@ class GitStatus(object):
         return None, DEFAULT_COMMANDS
 
     def firstlineno(self):
-        return self._linenos[0]
+        return self._linenos[0] if self._linenos else None
 
     def nextlineno(self, currentLineNo, up=False):
         change = -1 if up else +1

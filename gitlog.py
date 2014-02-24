@@ -1,23 +1,24 @@
-from .utils import findFilenameAndCommands, remoteCommand, lastCommand, gotoLine, currentLineNo, replaceView
+from .utils import findFilenameAndCommands, remoteCommand, gotoLine, currentLineNo, replaceView, logCommand
 from sublime_plugin import WindowCommand, TextCommand
 from .constants import LOG_VIEW_NAME
 from .commands import GitCommand, GIT_LOG, GIT_SHOW
 
 class RemoteGitLog(TextCommand):
     def run(self, edit, **kwargs):
+        args = kwargs
         view = self.view
-        print ('goto line ', getattr(view, "lastloglineno", 1))
         filename, commands = findFilenameAndCommands(view)
-        if view.name() == LOG_VIEW_NAME:
-            filename = lastCommand().value
-        elif filename is None:
+        if filename is None:
             filename = view.file_name()
+        if filename:
+            args[filename] = filename
+        logCommand("remote_git_log", args)
         command = GitCommand(GIT_LOG, filename)
         if kwargs.get('patch') == True:
             command.addOption('-p')
         result = remoteCommand(view, command)
         view.run_command("replace_view_content", args=dict(content=result, name=LOG_VIEW_NAME))
-        gotoLine(view, getattr(view, "lastloglineno", 1))
+        gotoLine(view, getattr(view, "lastloglineno", 0), atTop=True)
 
 class RemoteGitShowCommit(TextCommand):
     def run(self, edit):
@@ -32,10 +33,11 @@ class RemoteGitLogChangeLine(TextCommand):
             return
         gotoNextCommit(self.view, up=up, currentLine=currentLineNo(self.view))
         self.view.lastloglineno = currentLineNo(self.view)
-        print('set lastloglineno', self.view.lastloglineno)
 
 def gotoNextCommit(view, up, currentLine):
     lines = view.find_all('^commit')
+    if len(lines) <= 1:
+        return
     lineNos = [view.rowcol(l.a)[0] for l in lines]
     for index, lineNo in enumerate(lineNos):
         if lineNo > currentLine:

@@ -5,16 +5,19 @@ from .constants import ST_VIEW_NAME, VIEW_PREFIX
 from .commands import GitCommand, GIT_STATUS
 from sublime import Region
 from sublime_plugin import TextCommand
+from json import dumps, loads
 
 mydir = abspath(dirname(__file__))
 lastCommandFile = join(mydir, "last-command")
 
 def remoteCommand(view, command):
     args = ["bash", "remote_command.sh", projectRoot(view)] + command.asList()
-    open(lastCommandFile, 'a').write(command.asString() + '\n')
     proc = Popen(' '.join(args), cwd=mydir, stdout=PIPE, stderr=PIPE, stdin=PIPE, shell=True)
     stdout, stderr = proc.communicate(timeout=2)
     return stderr.decode('utf-8') + stdout.decode('utf-8')
+
+def logCommand(command, args=None):
+    open(lastCommandFile, 'a').write(dumps([command, args]) + '\n')
 
 def projectRoot(view):
     currentFile = view.file_name()
@@ -30,9 +33,9 @@ def lastCommand(historyIndex=0):
         lastCommands = open(lastCommandFile).readlines()
         if len(lastCommands) > 5:
             open(lastCommandFile, 'w').write(''.join(lastCommands[-5:]))
-        return GitCommand.fromString(lastCommands[-historyIndex].strip())
+        return loads(lastCommands[-historyIndex].strip())
     else:
-        return GitCommand(GIT_STATUS)
+        return {'RemoteGitSt': {}}
 
 def currentLineNo(view):
     currentLineNo, _ = view.rowcol(view.sel()[0].a)

@@ -37,6 +37,5 @@ class RemoteGitStatusHelp(WindowCommand):
 
 class RemoteGitBack(WindowCommand):
     def run(self):
-        command, args = lastCommand(1)
-        print ('run:', args)
+        command, args = lastCommand(2)
         self.window.run_command(command, args=args)

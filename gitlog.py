@@ -8,10 +8,12 @@ class RemoteGitLog(TextCommand):
         args = kwargs
         view = self.view
         filename, commands = findFilenameAndCommands(view)
-        if filename is None:
+        if 'filename' in kwargs:
+            filename = kwargs['filename']
+        elif filename is None:
             filename = view.file_name()
         if filename:
-            args[filename] = filename
+            args['filename'] = filename
         logCommand("remote_git_log", args)
         command = GitCommand(GIT_LOG, filename)
         if kwargs.get('patch') == True:
@@ -22,6 +24,7 @@ class RemoteGitLog(TextCommand):
 
 class RemoteGitShowCommit(TextCommand):
     def run(self, edit):
+        logCommand("remote_git_show_commit")
         currentLine = self.view.substr(self.view.line(self.view.sel()[0]))
         commit = currentLine.split()[1]
         result = remoteCommand(self.view, GitCommand(GIT_SHOW, commit))

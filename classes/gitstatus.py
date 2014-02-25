@@ -50,13 +50,13 @@ class GitStatus(object):
         untracked = []
         appendTo = None
         for lineno, line in enumerate(message.split("\n")):
-            if line == "# Changes to be committed:":
+            if "Changes to be committed:" in line:
                 appendTo = staged
-            elif line == "# Changes not staged for commit:" or line == "# Changed but not updated:":
+            elif "Changes not staged for commit:" in line or "Changed but not updated:" in line:
                 appendTo = changed
-            elif line == "# Untracked files:":
+            elif "Untracked files:" in line:
                 appendTo = untracked
-            if line.startswith("#   ") and not line.startswith("#   ("):
+            if line.startswith("#   ") and not line.startswith("#   (") or line.startswith('    '):
                 filename = line[4:].split(":   ", 1)[-1].strip()
                 status = "deleted" if "deleted:" in line else "modified"
                 appendTo.append((lineno, filename, status))

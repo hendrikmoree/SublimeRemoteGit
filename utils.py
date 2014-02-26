@@ -2,7 +2,6 @@ from subprocess import Popen, PIPE
 from os.path import abspath, dirname, join, isfile
 from .classes.gitstatus import GitStatus
 from .constants import ST_VIEW_NAME, VIEW_PREFIX
-from .commands import GitCommand, GIT_STATUS
 from sublime import Region
 from sublime_plugin import TextCommand
 from json import dumps, loads
@@ -32,7 +31,9 @@ def lastCommand(historyIndex=0):
     if isfile(lastCommandFile):
         lastCommands = open(lastCommandFile).readlines()
         if len(lastCommands) > 5:
-            open(lastCommandFile, 'w').write(''.join(lastCommands[-5:]))
+            open(lastCommandFile, 'w').write(''.join(lastCommands[-6:-1]))
+        else:
+            open(lastCommandFile, 'w').write(''.join(lastCommands[:-1]))
         return loads(lastCommands[-historyIndex].strip())
     else:
         return {'RemoteGitSt': {}}

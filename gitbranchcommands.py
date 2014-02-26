@@ -1,6 +1,6 @@
 from .utils import remoteCommand
 from sublime_plugin import TextCommand
-from .commands import GitCommand, GIT_CHECKOUT_BRANCH, GIT_CHECKOUT_NEW_BRANCH, GIT_MERGE_BRANCH, GIT_LIST_BRANCH, GIT_REMOVE_BRANCH
+from .commands import GitCommand, GIT_CHECKOUT_BRANCH, GIT_CHECKOUT_NEW_BRANCH, GIT_MERGE_BRANCH, GIT_LIST_BRANCH, GIT_REMOVE_BRANCH, GIT_LIST_TAGS
 
 class _RemoteGitBranchCommand(TextCommand):
     choose = True
@@ -10,7 +10,7 @@ class _RemoteGitBranchCommand(TextCommand):
         if self.choose or self.show:
             branches = [
                 b.strip() for b in
-                remoteCommand(self.view, GitCommand(GIT_LIST_BRANCH)).strip().split('\n')
+                remoteCommand(self.view, GitCommand(self.listcommand)).strip().split('\n')
                 if self.show or (self.choose and not b.startswith('*'))
             ]
             self.view.window().show_quick_panel(branches, lambda x: self.checkout(branches[x]) if x != -1 and self.choose else None)
@@ -23,6 +23,7 @@ class _RemoteGitBranchCommand(TextCommand):
 
 class RemoteGitCheckoutBranch(_RemoteGitBranchCommand):
     command = GIT_CHECKOUT_BRANCH
+    listcommand = GIT_LIST_BRANCH
 
 class RemoteGitCheckoutNewBranch(_RemoteGitBranchCommand):
     command = GIT_CHECKOUT_NEW_BRANCH
@@ -30,11 +31,18 @@ class RemoteGitCheckoutNewBranch(_RemoteGitBranchCommand):
 
 class RemoteGitMergeBranch(_RemoteGitBranchCommand):
     command = GIT_MERGE_BRANCH
+    listcommand = GIT_LIST_BRANCH
 
 class RemoteGitRemoveBranch(_RemoteGitBranchCommand):
     command = GIT_REMOVE_BRANCH
+    listcommand = GIT_LIST_BRANCH
 
 class RemoteGitListBranch(_RemoteGitBranchCommand):
-    command = GIT_LIST_BRANCH
+    listcommand = GIT_LIST_BRANCH
+    show = True
+    choose = False
+
+class RemoteGitListTags(_RemoteGitBranchCommand):
+    listcommand = GIT_LIST_TAGS
     show = True
     choose = False

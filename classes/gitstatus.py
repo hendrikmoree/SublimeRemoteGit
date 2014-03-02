@@ -58,7 +58,7 @@ class GitStatus(object):
                 appendTo = changed
             elif "Untracked files:" in line:
                 appendTo = untracked
-            if line.startswith("#   ") and not line.startswith("#   (") or line.startswith('    '):
+            if appendTo is not None and (line.startswith("#   ") and not line.startswith("#   (") or line.startswith('    ')):
                 filename = line[4:].split(":   ", 1)[-1].strip()
                 status = "deleted" if "deleted:" in line else "modified"
                 appendTo.append((lineno, filename, status))

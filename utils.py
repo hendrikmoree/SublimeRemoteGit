@@ -9,7 +9,8 @@ mydir = abspath(dirname(__file__))
 lastCommandFile = join(mydir, "last-command")
 
 def remoteCommand(view, command):
-    args = ["bash", "remote_command.sh", view.rootDir] + command.asList()
+    rootDir = view.rootDir if hasattr(view, 'rootDir') else projectRoot(view)
+    args = ["bash", "remote_command.sh", rootDir] + command.asList()
     proc = Popen(' '.join(args), cwd=mydir, stdout=PIPE, stderr=PIPE, stdin=PIPE, shell=True)
     stdout, stderr = proc.communicate(timeout=2)
     return stderr.decode('utf-8') + stdout.decode('utf-8')

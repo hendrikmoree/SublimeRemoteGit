@@ -1,6 +1,7 @@
 from .utils import remoteCommand
 from sublime_plugin import TextCommand
 from .classes.commands import GitCommand, GIT_CHECKOUT_BRANCH, GIT_CHECKOUT_NEW_BRANCH, GIT_MERGE_BRANCH, GIT_LIST_BRANCH, GIT_REMOVE_BRANCH, GIT_LIST_TAGS, GIT_REBASE_BRANCH
+from sublime import message_dialog
 
 class _RemoteGitBranchCommand(TextCommand):
     choose = True
@@ -11,9 +12,12 @@ class _RemoteGitBranchCommand(TextCommand):
             branches = [
                 b.strip() for b in
                 remoteCommand(self.view, GitCommand(self.listcommand)).strip().split('\n')
-                if self.show or (self.choose and not b.startswith('*'))
+                if b.strip() and (self.show or (self.choose and not b.startswith('*')))
             ]
-            self.view.window().show_quick_panel(branches, lambda x: self.checkout(branches[x]) if x != -1 and self.choose else None)
+            if branches:
+                self.view.window().show_quick_panel(branches, lambda x: self.checkout(branches[x]) if x != -1 and self.choose else None)
+            else:
+                message_dialog("No branches/tags found")
         else:
             self.view.window().show_input_panel("Branch name: ", "", self.checkout, None, None)
 

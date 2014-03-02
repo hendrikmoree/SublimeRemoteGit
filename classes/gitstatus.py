@@ -41,6 +41,8 @@ class GitStatus(object):
             return self.closestLineNo(currentLineNo)
 
     def closestLineNo(self, currentLineNo):
+        if not self._linenos:
+            return
         return min(self._linenos, key=lambda x: abs(x - currentLineNo))
 
     @classmethod

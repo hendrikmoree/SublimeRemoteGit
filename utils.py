@@ -10,7 +10,7 @@ mydir = abspath(dirname(__file__))
 lastCommandFile = join(mydir, "last-command")
 
 def remoteCommand(view, command):
-    args = ["bash", "remote_command.sh", projectRoot(view)] + command.asList()
+    args = ["bash", "remote_command.sh", view.rootDir] + command.asList()
     proc = Popen(' '.join(args), cwd=mydir, stdout=PIPE, stderr=PIPE, stdin=PIPE, shell=True)
     stdout, stderr = proc.communicate(timeout=2)
     return stderr.decode('utf-8') + stdout.decode('utf-8')
@@ -48,6 +48,8 @@ def findFilenameAndCommands(view):
     return gitStatus.fileAndCommandsForLine(row)
 
 def gotoLine(view, lineno, atTop=False):
+    if lineno is None:
+        return
     textPoint = view.text_point(lineno, 0)
     pointRegion = Region(textPoint, textPoint)
     view.sel().clear()

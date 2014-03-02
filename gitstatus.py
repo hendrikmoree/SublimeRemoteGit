@@ -4,23 +4,19 @@ from sublime import Region
 
 from .classes.gitstatus import GitStatus
 from .commands import GIT_STATUS, GitCommand
-from .utils import remoteCommand, currentLineNo, gotoLine, replaceView, createView, lastCommand, logCommand
-from .constants import ST_VIEW_NAME, VIEW_PREFIX
+from .utils import remoteCommand, currentLineNo, gotoLine, replaceView, lastCommand, logCommand
+from .constants import ST_VIEW_NAME
 
 class RemoteGitSt(TextCommand):
     def run(self, edit):
         logCommand("remote_git_st")
         result = remoteCommand(self.view, GitCommand(GIT_STATUS))
-        if self.view.name().startswith(VIEW_PREFIX):
-            replaceView(self.view, edit, result)
-            view = self.view
-        else:
-            view = createView(self.view.window())
-            replaceView(view, edit, result)
-        gitStatus = GitStatus.fromMessage(view.substr(Region(0, view.size())))
+        replaceView(self.view, edit, result)
+
+        gitStatus = GitStatus.fromMessage(self.view.substr(Region(0, self.view.size())))
         toLine = getattr(self.view, "laststatuslineno", gitStatus.firstlineno())
         if toLine:
-            gotoLine(view, gitStatus.closestLineNo(toLine))
+            gotoLine(self.view, gitStatus.closestLineNo(toLine))
 
 class RemoteGitStatusChangeLine(TextCommand):
     def run(self, edit, up=False):
@@ -39,3 +35,4 @@ class RemoteGitBack(WindowCommand):
     def run(self):
         command, args = lastCommand(2)
         self.window.run_command(command, args=args)
+

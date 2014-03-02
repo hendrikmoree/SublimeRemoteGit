@@ -126,8 +126,8 @@ Untracked files:
     def testParseAllClean(self):
         gitStatus = GitStatus.fromMessage("""# On branch master
 nothing to commit, working directory clean""")
-        self.assertEquals([], gitStatus.staged)
-        self.assertEquals([], gitStatus.changed)
-        self.assertEquals([], gitStatus.untracked)
-        self.assertEquals(None, gitStatus.firstlineno())
-        self.assertEquals(None, gitStatus.closestLineNo(1))
+        self.assertEqual([], gitStatus.staged)
+        self.assertEqual([], gitStatus.changed)
+        self.assertEqual([], gitStatus.untracked)
+        self.assertEqual(None, gitStatus.firstlineno())
+        self.assertEqual(None, gitStatus.closestLineNo(1))

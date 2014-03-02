@@ -1,4 +1,4 @@
-from sublime_plugin import WindowCommand, TextCommand
+from sublime_plugin import TextCommand
 from .utils import remoteCommand, findFilenameAndCommands, replaceView
 from .commands import GitCommand, GIT_ADD, GIT_RM, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH, GIT_PULL, GIT_COMMIT, GIT_STATUS
 from .constants import ST_VIEW_NAME

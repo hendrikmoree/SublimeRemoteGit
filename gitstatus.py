@@ -1,4 +1,3 @@
-
 from sublime_plugin import TextCommand, WindowCommand
 from sublime import Region
 

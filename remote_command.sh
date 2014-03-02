@@ -1,10 +1,3 @@
-## begin license ##
-#
-# All rights reserved.
-#
-# Copyright (C) 2013-2014 Seecr (Seek You Too B.V.) http://seecr.nl
-#
-## end license ##
 PROJECT_DIR=$1
 shift
 GIT_COMMAND=$1

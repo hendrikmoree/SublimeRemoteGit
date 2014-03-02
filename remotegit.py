@@ -1,4 +1,4 @@
-from .utils import projectRoot, createView
+from .utils import projectRoot, createView, replaceView
 from sublime_plugin import TextCommand, WindowCommand
 from .constants import VIEW_PREFIX
 from os import listdir
@@ -34,3 +34,8 @@ class RemoteGitChooseRootDir(WindowCommand):
         else:
             directory = join(rootDir, 'deps.d', name)
         view.run_command('remote_git_set_root_dir', args=dict(rootDir=directory))
+
+class ReplaceViewContent(TextCommand):
+    def run(self, edit, content, **arguments):
+        name = arguments.get('name', VIEW_PREFIX)
+        replaceView(self.view, edit, content, name=name)

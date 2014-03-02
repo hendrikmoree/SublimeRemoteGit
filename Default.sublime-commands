@@ -4,6 +4,7 @@
     { "caption": "RemoteGit: Checkout branch", "command": "remote_git_checkout_branch"},
     { "caption": "RemoteGit: Checkout new branch", "command": "remote_git_checkout_new_branch"},
     { "caption": "RemoteGit: Merge branch", "command": "remote_git_merge_branch"},
+    { "caption": "RemoteGit: Rebase branch", "command": "remote_git_rebase_branch"},
     { "caption": "RemoteGit: Remove branch", "command": "remote_git_remove_branch"},
     { "caption": "RemoteGit: List branches", "command": "remote_git_list_branch"},
     { "caption": "RemoteGit: List tags", "command": "remote_git_list_tags"},

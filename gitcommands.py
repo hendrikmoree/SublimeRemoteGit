@@ -1,5 +1,5 @@
 from sublime_plugin import TextCommand
-from .utils import remoteCommand, findFilenameAndCommands, replaceView
+from .utils import remoteCommand, findFilenameAndCommands, replaceView, logCommand
 from .classes.commands import GitCommand, GIT_ADD, GIT_RM, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH, GIT_PULL, GIT_COMMIT, GIT_STATUS
 from .constants import ST_VIEW_NAME
 
@@ -27,6 +27,7 @@ class _RemoteGitCommand(TextCommand):
             if not self.showOuput:
                 view.run_command("remote_git_st")
             else:
+                logCommand(view, self.__class__.__name__)
                 view.run_command("replace_view_content", args=dict(content=result, name=self.viewName))
 
 class RemoteGitStage(_RemoteGitCommand):

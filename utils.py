@@ -15,7 +15,8 @@ def remoteCommand(view, command):
     stdout, stderr = proc.communicate(timeout=2)
     return stderr.decode('utf-8') + stdout.decode('utf-8')
 
-def logCommand(command, args=None):
+def logCommand(view, command, args=None):
+    view.lastcommand = [command, args]
     open(lastCommandFile, 'a').write(dumps([command, args]) + '\n')
 
 def projectRoot(view):
@@ -30,10 +31,10 @@ def projectRoot(view):
 def lastCommand(historyIndex=0):
     if isfile(lastCommandFile):
         lastCommands = open(lastCommandFile).readlines()
-        if len(lastCommands) > 5:
-            open(lastCommandFile, 'w').write(''.join(lastCommands[-6:-1]))
+        if len(lastCommands) > 10:
+            open(lastCommandFile, 'w').write(''.join(lastCommands[1:]))
         else:
-            open(lastCommandFile, 'w').write(''.join(lastCommands[:-1]))
+            open(lastCommandFile, 'w').write(''.join(lastCommands[:-historyIndex]))
         return loads(lastCommands[-historyIndex].strip())
     else:
         return {'RemoteGitSt': {}}

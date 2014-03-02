@@ -1,6 +1,8 @@
 from sublime_plugin import TextCommand, WindowCommand
 from sublime import Region
 
+from re import compile as regexCompile
+
 from .classes.gitstatus import GitStatus
 from .classes.commands import GIT_STATUS, GitCommand
 from .utils import remoteCommand, currentLineNo, gotoLine, replaceView, lastCommand, logCommand
@@ -8,7 +10,7 @@ from .constants import ST_VIEW_NAME
 
 class RemoteGitSt(TextCommand):
     def run(self, edit):
-        logCommand("remote_git_st")
+        logCommand(self.view, self.__class__.__name__)
         result = remoteCommand(self.view, GitCommand(GIT_STATUS))
         replaceView(self.view, edit, result)
 
@@ -30,8 +32,10 @@ class RemoteGitStatusHelp(WindowCommand):
         items = ['a (git add or git rm if deleted)', 'r (git reset HEAD)', 'c (git checkout)', 'm (git commit)', 'p (git push)', 'd (git diff)', 'l (git log)']
         self.window.show_quick_panel(items, lambda x: None)
 
-class RemoteGitBack(WindowCommand):
-    def run(self):
+p = regexCompile('([A-Z])')
+class RemoteGitBack(TextCommand):
+    def run(self, edit):
         command, args = lastCommand(2)
-        self.window.run_command(command, args=args)
+        command = p.sub(r'_\1', command)[1:].lower()
+        self.view.run_command(command, args=args)
 

@@ -21,7 +21,7 @@ class RemoteGitLog(TextCommand):
                 view.rootDir = projectRoot(view)
             if view.rootDir in filename:
                 filename = filename.split(view.rootDir)[1][1:]
-        logCommand("remote_git_log", args)
+        logCommand(view, self.__class__.__name__, args)
         command = GitCommand(GIT_LOG, filename)
         if kwargs.get('patch') == True:
             command.addOption('-p')
@@ -31,7 +31,7 @@ class RemoteGitLog(TextCommand):
 
 class RemoteGitShowCommit(TextCommand):
     def run(self, edit):
-        logCommand("remote_git_show_commit")
+        logCommand(self.view, self.__class__.__name__)
         currentLine = self.view.substr(self.view.line(self.view.sel()[0]))
         commit = currentLine.split()[1]
         result = remoteCommand(self.view, GitCommand(GIT_SHOW, commit))

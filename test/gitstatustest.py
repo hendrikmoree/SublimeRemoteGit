@@ -1,7 +1,7 @@
 
 from unittest import TestCase
 from SublimeRemoteGit.classes.gitstatus import GitStatus, DEFAULT_COMMANDS
-from SublimeRemoteGit.commands import GIT_RESET, GIT_ADD, GIT_CHECKOUT, GIT_DIFF, GIT_RM
+from SublimeRemoteGit.classes.commands import GIT_RESET, GIT_ADD, GIT_CHECKOUT, GIT_DIFF, GIT_RM
 
 class GitStatusTest(TestCase):
 

@@ -1,7 +1,7 @@
 from .utils import findFilenameAndCommands, remoteCommand, gotoLine, currentLineNo, replaceView, logCommand
 from sublime_plugin import WindowCommand, TextCommand
 from .constants import LOG_VIEW_NAME
-from .commands import GitCommand, GIT_LOG, GIT_SHOW
+from .classes.commands import GitCommand, GIT_LOG, GIT_SHOW
 
 class RemoteGitLog(TextCommand):
     def run(self, edit, **kwargs):

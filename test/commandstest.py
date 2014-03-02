@@ -1,5 +1,5 @@
 from unittest import TestCase
-from SublimeRemoteGit.commands import GitCommand, GIT_STATUS, GIT_PULL, GIT_LOG
+from SublimeRemoteGit.classes.commands import GitCommand, GIT_STATUS, GIT_PULL, GIT_LOG
 
 class CommandsTest(TestCase):
     def testCommand(self):

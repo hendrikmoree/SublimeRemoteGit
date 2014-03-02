@@ -2,7 +2,7 @@ from sublime_plugin import TextCommand, WindowCommand
 from sublime import Region
 
 from .classes.gitstatus import GitStatus
-from .commands import GIT_STATUS, GitCommand
+from .classes.commands import GIT_STATUS, GitCommand
 from .utils import remoteCommand, currentLineNo, gotoLine, replaceView, lastCommand, logCommand
 from .constants import ST_VIEW_NAME
 

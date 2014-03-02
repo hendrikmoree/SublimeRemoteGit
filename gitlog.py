@@ -14,13 +14,13 @@ class RemoteGitLog(TextCommand):
             filename = view.file_name()
         if filename:
             args['filename'] = filename
-        if 'deps.d' in filename:
-            root, depsd = filename.rsplit('deps.d', 1)
-            view.rootDir = "%sdeps.d/%s" % (root, depsd.split('/')[1])
-        else:
-            view.rootDir = projectRoot(view)
-        if view.rootDir in filename:
-            filename = filename.split(view.rootDir)[1][1:]
+            if 'deps.d' in filename:
+                root, depsd = filename.rsplit('deps.d', 1)
+                view.rootDir = "%sdeps.d/%s" % (root, depsd.split('/')[1])
+            else:
+                view.rootDir = projectRoot(view)
+            if view.rootDir in filename:
+                filename = filename.split(view.rootDir)[1][1:]
         logCommand("remote_git_log", args)
         command = GitCommand(GIT_LOG, filename)
         if kwargs.get('patch') == True:

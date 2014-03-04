@@ -1,4 +1,4 @@
-from .utils import findFilenameAndCommands, remoteCommand, gotoLine, currentLineNo, replaceView, logCommand, projectRoot
+from .utils import findFilenameAndCommands, remoteCommand, gotoLine, currentLineNo, replaceView, logCommand, projectRoot, lastCommand
 from sublime_plugin import WindowCommand, TextCommand
 from .constants import LOG_VIEW_NAME
 from .classes.commands import GitCommand, GIT_LOG, GIT_SHOW
@@ -12,6 +12,10 @@ class RemoteGitLog(TextCommand):
             filename = kwargs['filename']
         elif filename is None:
             filename = view.file_name()
+        if filename is None:
+            command, args = lastCommand(1, remove=False)
+            if command == self.__class__.__name__ and args and 'filename' in args:
+                filename = args['filename']
         if filename:
             args['filename'] = filename
             if 'deps.d' in filename:

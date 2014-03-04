@@ -28,12 +28,12 @@ def projectRoot(view):
     elif view.window() and view.window().folders():
         return view.window().folders()[0]
 
-def lastCommand(historyIndex=0):
+def lastCommand(historyIndex=0, remove=True):
     if isfile(lastCommandFile):
         lastCommands = open(lastCommandFile).readlines()
         if len(lastCommands) > 10:
             open(lastCommandFile, 'w').write(''.join(lastCommands[1:]))
-        else:
+        if remove:
             open(lastCommandFile, 'w').write(''.join(lastCommands[:-historyIndex]))
         return loads(lastCommands[-historyIndex].strip())
     else:

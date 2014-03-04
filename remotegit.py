@@ -4,28 +4,24 @@ from .constants import VIEW_PREFIX
 from os import listdir
 from os.path import join, isdir, basename
 
-class RemoteGit(TextCommand):
-    def run(self, edit):
-        view = self.view
-        if not view.name().startswith(VIEW_PREFIX):
-            view = createView(self.view.window())
-        view.run_command('remote_git_set_root_dir', args=dict(rootDir=projectRoot(self.view)))
-
 class RemoteGitSetRootDir(TextCommand):
     def run(self, edit, rootDir):
         self.view.rootDir = rootDir
         self.view.run_command("remote_git_st")
 
-class RemoteGitChooseRootDir(WindowCommand):
+class RemoteGit(WindowCommand):
     def run(self):
         view = self.window.active_view()
+        if not view.name().startswith(VIEW_PREFIX):
+            view = createView(self.view.window())
         items = [basename(projectRoot(view))]
         depsdDir = join(projectRoot(view), 'deps.d')
         if not isdir(depsdDir):
+            self._changeDir(items[0], view)
             return
         for f in listdir(depsdDir):
             items.append(f)
-        self.window.show_quick_panel(items, lambda x: self._changeDir(items[x], view))
+        self.window.show_quick_panel(items, lambda x: self._changeDir(items[x], view) if x != -1 else None)
 
     def _changeDir(self, name, view):
         rootDir = projectRoot(view)

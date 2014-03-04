@@ -25,6 +25,8 @@ class RemoteGitLog(TextCommand):
         command = GitCommand(GIT_LOG, filename)
         if kwargs.get('patch') == True:
             command.addOption('-p')
+        if filename:
+            command.addOption('--follow')
         result = remoteCommand(view, command)
         view.run_command("replace_view_content", args=dict(content=result, name=LOG_VIEW_NAME))
         gotoLine(view, getattr(view, "lastloglineno", 0), atTop=True)

@@ -10,5 +10,6 @@
     { "caption": "RemoteGit: List tags", "command": "remote_git_list_tags"},
     { "caption": "RemoteGit: Git log", "command": "remote_git_log"},
     { "caption": "RemoteGit: Git log with patch", "command": "remote_git_log", "args": {"patch": true}},
-    { "caption": "RemoteGit: Change root directory", "command": "remote_git_choose_root_dir"}
+    { "caption": "RemoteGit: Change root directory", "command": "remote_git_choose_root_dir"},
+    { "caption": "RemoteGit: Git diff for current file", "command": "remote_git_diff"}
 ]

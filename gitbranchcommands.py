@@ -9,11 +9,11 @@ class _RemoteGitBranchCommand(TextCommand):
 
     def run(self, edit):
         if self.choose or self.show:
-            branches = [
+            branches = list(reversed([
                 b.strip() for b in
                 remoteCommand(self.view, GitCommand(self.listcommand)).strip().split('\n')
                 if b.strip() and (self.show or (self.choose and not b.startswith('*')))
-            ]
+            ]))
             if branches:
                 self.view.window().show_quick_panel(branches, lambda x: self.checkout(branches[x]) if x != -1 and self.choose else None)
             else:

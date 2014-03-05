@@ -13,7 +13,7 @@ class RemoteGit(WindowCommand):
     def run(self):
         view = self.window.active_view()
         if not view.name().startswith(VIEW_PREFIX):
-            view = createView(self.view.window())
+            view = createView(view.window())
         items = [basename(projectRoot(view))]
         depsdDir = join(projectRoot(view), 'deps.d')
         if not isdir(depsdDir):

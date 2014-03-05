@@ -32,9 +32,10 @@ def lastCommand(historyIndex=0, remove=True):
     if isfile(lastCommandFile):
         lastCommands = open(lastCommandFile).readlines()
         if len(lastCommands) > 10:
-            open(lastCommandFile, 'w').write(''.join(lastCommands[1:]))
+            lastCommands = lastCommands[-10:]
         if remove:
-            open(lastCommandFile, 'w').write(''.join(lastCommands[:-historyIndex]))
+            lastCommands = lastCommands[:-historyIndex]
+        open(lastCommandFile, 'w').write(''.join(lastCommands))
         return loads(lastCommands[-historyIndex].strip())
     else:
         return {'RemoteGitSt': {}}

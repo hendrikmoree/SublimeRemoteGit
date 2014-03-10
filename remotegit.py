@@ -1,8 +1,9 @@
-from .utils import projectRoot, createView, replaceView
+from .utils import projectRoot, createView, replaceView, lastCommand
 from sublime_plugin import TextCommand, WindowCommand
 from .constants import VIEW_PREFIX
 from os import listdir
 from os.path import join, isdir, basename
+from re import compile as regexCompile
 
 class RemoteGitSetRootDir(TextCommand):
     def run(self, edit, rootDir):
@@ -38,3 +39,10 @@ class ReplaceViewContent(TextCommand):
     def run(self, edit, content, **arguments):
         name = arguments.get('name', VIEW_PREFIX)
         replaceView(self.view, edit, content, name=name)
+
+p = regexCompile('([A-Z])')
+class RemoteGitBack(TextCommand):
+    def run(self, edit):
+        command, args = lastCommand(2)
+        command = p.sub(r'_\1', command)[1:].lower()
+        self.view.run_command(command, args=args)

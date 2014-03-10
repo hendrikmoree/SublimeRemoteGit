@@ -15,8 +15,8 @@ class CommandsTest(TestCase):
     def testWithOption(self):
         command = GitCommand(command=GIT_LOG, value="a file")
         command.addOption('-p')
-        self.assertEqual(['"git log -p"', '"a file"'], command.asList())
-        self.assertEqual('"git log -p" "a file"', command.asString())
+        self.assertEqual(['"git log --decorate=short --graph -p"', '"a file"'], command.asList())
+        self.assertEqual('"git log --decorate=short --graph -p" "a file"', command.asString())
 
     def testCommandFromString(self):
         command = GitCommand.fromString('"git log"')

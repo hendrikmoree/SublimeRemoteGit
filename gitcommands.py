@@ -70,3 +70,8 @@ class RemoteGitCommit(TextCommand):
     def commit(self, message):
         remoteCommand(self.view, GitCommand(GIT_COMMIT, message))
         self.view.run_command("remote_git_st")
+
+class RemoteGitCommitStageAll(RemoteGitCommit):
+    def run(self, edit):
+        self.view.run_command("remote_git_stage_all")
+        super(RemoteGitCommitStageAll, self).run(edit)

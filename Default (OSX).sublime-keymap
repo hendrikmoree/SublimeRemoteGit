@@ -15,6 +15,9 @@
     { "keys": ["m"], "command": "remote_git_commit", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
     ]},
+    { "keys": ["M"], "command": "remote_git_commit_stage_all", "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
+    ]},
     { "keys": ["p"], "command": "remote_git_push", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
     ]},

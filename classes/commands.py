@@ -17,6 +17,8 @@ GIT_LIST_BRANCH = "git branch -l"
 GIT_LOG = "git log --decorate=short --graph"
 GIT_SHOW = "git show"
 GIT_LIST_TAGS = "git tag -l"
+GIT_TAG = "git tag"
+GIT_REMOVE_TAG = "git tag -d"
 
 class GitCommand(object):
     def __init__(self, command, value=None):

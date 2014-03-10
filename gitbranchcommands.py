@@ -1,6 +1,6 @@
 from .utils import remoteCommand
 from sublime_plugin import TextCommand
-from .classes.commands import GitCommand, GIT_CHECKOUT_BRANCH, GIT_CHECKOUT_NEW_BRANCH, GIT_MERGE_BRANCH, GIT_LIST_BRANCH, GIT_REMOVE_BRANCH, GIT_LIST_TAGS, GIT_REBASE_BRANCH
+from .classes.commands import GitCommand, GIT_CHECKOUT_BRANCH, GIT_CHECKOUT_NEW_BRANCH, GIT_MERGE_BRANCH, GIT_LIST_BRANCH, GIT_REMOVE_BRANCH, GIT_REBASE_BRANCH
 from sublime import message_dialog
 
 class _RemoteGitBranchCommand(TextCommand):
@@ -47,10 +47,5 @@ class RemoteGitRemoveBranch(_RemoteGitBranchCommand):
 
 class RemoteGitListBranch(_RemoteGitBranchCommand):
     listcommand = GIT_LIST_BRANCH
-    show = True
-    choose = False
-
-class RemoteGitListTags(_RemoteGitBranchCommand):
-    listcommand = GIT_LIST_TAGS
     show = True
     choose = False

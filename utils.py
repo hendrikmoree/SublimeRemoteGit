@@ -72,9 +72,13 @@ def createView(window, name=ST_VIEW_NAME):
     view.set_syntax_file('Packages/SublimeRemoteGit/%s.tmLanguage' % name)
     return view
 
-def replaceView(view, edit, content, name=ST_VIEW_NAME):
+def maybeCreateView(view, name=ST_VIEW_NAME):
     if not view.name().startswith(VIEW_PREFIX):
         view = createView(view.window(), name=name)
+    return view
+
+def replaceView(view, edit, content, name=ST_VIEW_NAME):
+    view = maybeCreateView(view, name=name)
     view.set_name(name)
     view.set_read_only(False)
     view.erase(edit, Region(0, view.size()))

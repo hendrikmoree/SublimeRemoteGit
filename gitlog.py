@@ -1,4 +1,4 @@
-from .utils import findFilenameAndCommands, remoteCommand, gotoLine, currentLineNo, replaceView, logCommand, projectRoot, lastCommand
+from .utils import findFilenameAndCommands, remoteCommand, gotoLine, currentLineNo, replaceView, logCommand, projectRoot, lastCommand, maybeCreateView
 from sublime_plugin import WindowCommand, TextCommand
 from .constants import LOG_VIEW_NAME
 from .classes.commands import GitCommand, GIT_LOG, GIT_SHOW
@@ -32,8 +32,10 @@ class RemoteGitLog(TextCommand):
         if filename:
             command.addOption('--follow')
         result = remoteCommand(view, command)
+        view = maybeCreateView(self.view)
         view.run_command("replace_view_content", args=dict(content=result, name=LOG_VIEW_NAME))
-        gotoLine(view, getattr(view, "lastloglineno", 1), atTop=True)
+        gotoLineNo = getattr(view, "lastloglineno", -1)
+        gotoNextCommit(view, up=False, currentLine=gotoLineNo),
 
 class RemoteGitShowCommit(TextCommand):
     def run(self, edit):

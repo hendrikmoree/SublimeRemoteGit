@@ -21,6 +21,9 @@ class RemoteGit(WindowCommand):
             return
         for f in listdir(depsdDir):
             items.append(f)
+        if len(items) == 1:
+            self._changeDir(items[0], view)
+            return
         self.window.show_quick_panel(items, lambda x: self._changeDir(items[x], view) if x != -1 else None)
 
     def _changeDir(self, name, view):

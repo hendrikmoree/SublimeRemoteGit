@@ -3,6 +3,9 @@
     { "keys": ["a"], "command": "remote_git_stage", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
     ]},
+    { "keys": ["A"], "command": "remote_git_stage_all", "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
+    ]},
     { "keys": ["r"], "command": "remote_git_reset", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_st"}
     ]},

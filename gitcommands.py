@@ -1,6 +1,6 @@
 from sublime_plugin import TextCommand
 from .utils import remoteCommand, findFilenameAndCommands, replaceView, logCommand
-from .classes.commands import GitCommand, GIT_ADD, GIT_RM, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH, GIT_PULL, GIT_COMMIT, GIT_STATUS
+from .classes.commands import GitCommand, GIT_ADD, GIT_ADD_ALL, GIT_RM, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH, GIT_PULL, GIT_COMMIT, GIT_STATUS
 from .constants import ST_VIEW_NAME
 
 class _RemoteGitCommand(TextCommand):
@@ -33,6 +33,10 @@ class _RemoteGitCommand(TextCommand):
 
 class RemoteGitStage(_RemoteGitCommand):
     commands = [GIT_ADD, GIT_RM]
+
+class RemoteGitStageAll(_RemoteGitCommand):
+    addFilename = False
+    commands = [GIT_ADD_ALL]
 
 class RemoteGitReset(_RemoteGitCommand):
     commands = [GIT_RESET]

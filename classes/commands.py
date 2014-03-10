@@ -1,5 +1,6 @@
 GIT_RESET = "git reset HEAD"
 GIT_ADD = "git add"
+GIT_ADD_ALL = "git add ."
 GIT_RM = "git rm"
 GIT_STATUS = "git status"
 GIT_CHECKOUT = "git checkout --"

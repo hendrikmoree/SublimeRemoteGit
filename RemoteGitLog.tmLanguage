@@ -52,7 +52,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^commit</string>
+			<string>^\* commit</string>
 			<key>end</key>
 			<string>$</string>
 			<key>name</key>

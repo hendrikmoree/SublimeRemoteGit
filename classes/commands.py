@@ -13,7 +13,7 @@ GIT_DIFF = "git diff"
 GIT_PUSH = "git push"
 GIT_PULL = "git pull"
 GIT_LIST_BRANCH = "git branch -l"
-GIT_LOG = "git log --decorate=short"
+GIT_LOG = "git log --decorate=short --graph"
 GIT_SHOW = "git show"
 GIT_LIST_TAGS = "git tag -l"
 

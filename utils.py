@@ -31,12 +31,13 @@ def projectRoot(view):
 def lastCommand(historyIndex=0, remove=True):
     if isfile(lastCommandFile):
         lastCommands = open(lastCommandFile).readlines()
+        command = lastCommands[-historyIndex]
         if len(lastCommands) > 10:
             lastCommands = lastCommands[-10:]
         if remove:
             lastCommands = lastCommands[:-historyIndex]
         open(lastCommandFile, 'w').write(''.join(lastCommands))
-        return loads(lastCommands[-historyIndex].strip())
+        return loads(command.strip())
     else:
         return {'RemoteGitSt': {}}
 

@@ -70,5 +70,5 @@ def gotoNextCommit(view, up, currentLine):
 
 class RemoteGitLogHelp(WindowCommand):
     def run(self):
-        items = ['p (patch of this log)']
+        items = ['p (patch of this log)', 'enter (view commit)']
         self.window.show_quick_panel(items, lambda x: None)

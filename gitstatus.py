@@ -27,5 +27,15 @@ class RemoteGitStatusChangeLine(TextCommand):
 
 class RemoteGitStatusHelp(WindowCommand):
     def run(self):
-        items = ['a (git add or git rm if deleted)', 'r (git reset HEAD)', 'c (git checkout)', 'm (git commit)', 'p (git push)', 'd (git diff)', 'l (git log)']
+        items = [
+            'a (git add or git rm if deleted)',
+            'A (git add all)',
+            'r (git reset HEAD)',
+            'c (git checkout)',
+            'm (git commit)',
+            'M (git add all, then commit)',
+            'p (git push)',
+            'd (git diff)',
+            'l (git log)'
+        ]
         self.window.show_quick_panel(items, lambda x: None)

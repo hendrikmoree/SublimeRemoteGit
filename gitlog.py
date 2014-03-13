@@ -34,14 +34,16 @@ class RemoteGitLog(TextCommand):
         result = remoteCommand(view, command)
         view = maybeCreateView(self.view)
         view.run_command("replace_view_content", args=dict(content=result, name=LOG_VIEW_NAME))
-        gotoLineNo = getattr(view, "lastloglineno", -1)
-        gotoNextCommit(view, up=False, currentLine=gotoLineNo),
+        if hasattr(view, "lastloglineno"):
+            gotoLine(view, view.lastloglineno, atTop=True)
+        else:
+            gotoNextCommit(view, up=False, currentLine=-1),
 
 class RemoteGitShowCommit(TextCommand):
     def run(self, edit):
         logCommand(self.view, self.__class__.__name__)
         currentLine = self.view.substr(self.view.line(self.view.sel()[0]))
-        commit = currentLine.split()[-1]
+        commit = currentLine[currentLine.find('commit'):].split()[1]
         result = remoteCommand(self.view, GitCommand(GIT_SHOW, commit))
         replaceView(self.view, edit, result, name=LOG_VIEW_NAME)
 
@@ -53,7 +55,7 @@ class RemoteGitLogChangeLine(TextCommand):
         self.view.lastloglineno = currentLineNo(self.view)
 
 def gotoNextCommit(view, up, currentLine):
-    lines = view.find_all('^\* commit')
+    lines = view.find_all(' commit [a-z0-9]*')
     if len(lines) <= 1:
         return
     lineNos = [view.rowcol(l.a)[0] for l in lines]

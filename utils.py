@@ -10,7 +10,7 @@ def remoteCommand(view, command):
     args = ["bash", "remote_command.sh", rootDir] + command.asList()
     proc = Popen(' '.join(args), cwd=mydir, stdout=PIPE, stderr=PIPE, stdin=PIPE, shell=True)
     stdout, stderr = proc.communicate(timeout=2)
-    return stderr.decode('utf-8') + stdout.decode('utf-8')
+    return command.parseResult(stderr.decode('utf-8') + stdout.decode('utf-8'))
 
 def logCommand(view, command, args=None):
     view.lastcommand = [command, args]
@@ -37,3 +37,7 @@ def lastCommand(historyIndex=0, remove=True):
         return loads(command.strip())
     else:
         return {'RemoteGitSt': {}}
+
+def sortTags(tags):
+    tags.sort(key=lambda v: list(map(int, v.split()[0].split('.'))))
+    return list(tags)

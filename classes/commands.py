@@ -1,3 +1,5 @@
+from ..utils import sortTags
+
 GIT_RESET = "git reset HEAD"
 GIT_ADD = "git add"
 GIT_ADD_ALL = "git add ."
@@ -20,6 +22,10 @@ GIT_LIST_TAGS = "git tag -l -n"
 GIT_TAG = "git tag"
 GIT_REMOVE_TAG = "git tag -d"
 GIT_GREP = "git grep"
+
+functions = {
+    GIT_LIST_TAGS: sortTags
+}
 
 class GitCommand(object):
     def __init__(self, command, value=None):
@@ -53,3 +59,9 @@ class GitCommand(object):
             for option in splitted[2].split():
                 command.addOption(option)
         return command
+
+    def parseResult(self, result):
+        function = functions.get(self.command)
+        if function is None:
+            return result.strip()
+        return '\n'.join(function(result.strip().split('\n')))

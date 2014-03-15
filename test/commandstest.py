@@ -1,5 +1,5 @@
 from unittest import TestCase
-from SublimeRemoteGit.classes.commands import GitCommand, GIT_STATUS, GIT_PULL, GIT_LOG
+from SublimeRemoteGit.classes.commands import GitCommand, GIT_STATUS, GIT_PULL, GIT_LOG, GIT_LIST_TAGS
 
 class CommandsTest(TestCase):
     def testCommand(self):
@@ -35,3 +35,13 @@ class CommandsTest(TestCase):
         self.assertEqual("git log", command.command)
         self.assertEqual(["-p"], command.options)
         self.assertEqual("a file", command.value)
+
+    def testParseResult(self):
+        command = GitCommand(command=GIT_LOG)
+        result = command.parseResult("a result")
+        self.assertEqual("a result", result)
+
+    def testSortListTags(self):
+        command = GitCommand(command=GIT_LIST_TAGS)
+        result = command.parseResult("0.1 Tag 1\n0.2 Tag 2")
+        self.assertEqual("0.2 Tag 2\n0.1 Tag 1", result)

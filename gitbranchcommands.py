@@ -22,7 +22,9 @@ class _RemoteGitBranchCommand(TextCommand):
             self.view.window().show_input_panel("Branch name: ", "", self.checkout, None, None)
 
     def checkout(self, name):
-        remoteCommand(self.view, GitCommand(self.command, name))
+        result = remoteCommand(self.view, GitCommand(self.command, name))
+        if result.strip():
+            message_dialog(result)
         self.view.run_command("remote_git_st")
 
 class RemoteGitCheckoutBranch(_RemoteGitBranchCommand):

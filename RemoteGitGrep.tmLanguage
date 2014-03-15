@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string></string>
+	</array>
+	<key>name</key>
+	<string>RemoteGitGrep</string>
+	<key>patterns</key>
+	<array>
+        <dict>
+			<key>begin</key>
+			<string>^</string>
+			<key>end</key>
+			<string>:</string>
+			<key>name</key>
+			<string>markup.changed.diff</string>
+		</dict>
+    </array>
+	<key>scopeName</key>
+	<string>source.remote_git_grep</string>
+	<key>uuid</key>
+	<string>f380feab-08d5-4298-83e3-d299f8552a73</string>
+</dict>
+</plist>

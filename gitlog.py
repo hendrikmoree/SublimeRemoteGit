@@ -1,4 +1,5 @@
-from .utils import findFilenameAndCommands, remoteCommand, gotoLine, currentLineNo, replaceView, logCommand, projectRoot, lastCommand, maybeCreateView
+from .utils import remoteCommand, logCommand, projectRoot, lastCommand
+from .sublime_utils import findFilenameAndCommands, gotoLine, currentLineNo, replaceView, maybeCreateView
 from sublime_plugin import WindowCommand, TextCommand
 from .constants import LOG_VIEW_NAME
 from .classes.commands import GitCommand, GIT_LOG, GIT_SHOW

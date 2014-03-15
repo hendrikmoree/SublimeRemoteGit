@@ -3,7 +3,8 @@ from sublime import Region
 
 from .classes.gitstatus import GitStatus
 from .classes.commands import GIT_STATUS, GitCommand
-from .utils import remoteCommand, currentLineNo, gotoLine, replaceView, logCommand
+from .utils import remoteCommand, logCommand
+from .sublime_utils import currentLineNo, gotoLine, replaceView
 from .constants import ST_VIEW_NAME
 
 class RemoteGitSt(TextCommand):

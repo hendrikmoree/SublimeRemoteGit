@@ -1,4 +1,5 @@
-from .utils import projectRoot, createView, replaceView, lastCommand
+from .utils import projectRoot, lastCommand
+from .sublime_utils import createView, replaceView
 from sublime_plugin import TextCommand, WindowCommand
 from .constants import VIEW_PREFIX
 from os import listdir

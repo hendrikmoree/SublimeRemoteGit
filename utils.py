@@ -9,7 +9,7 @@ def remoteCommand(view, command):
     rootDir = view.rootDir if hasattr(view, 'rootDir') else projectRoot(view)
     args = ["bash", "remote_command.sh", rootDir] + command.asList()
     proc = Popen(' '.join(args), cwd=mydir, stdout=PIPE, stderr=PIPE, stdin=PIPE, shell=True)
-    stdout, stderr = proc.communicate(timeout=2)
+    stdout, stderr = proc.communicate(timeout=5)
     return command.parseResult(stderr.decode('utf-8') + stdout.decode('utf-8'))
 
 def logCommand(view, command, args=None):

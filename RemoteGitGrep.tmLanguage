@@ -12,11 +12,22 @@
 	<array>
         <dict>
 			<key>begin</key>
-			<string>^</string>
+			<string>^([a-z/.]*):([0-9]*)</string>
 			<key>end</key>
 			<string>:</string>
-			<key>name</key>
-			<string>markup.changed.diff</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>markup.changed.diff</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>markup.inserted.diff</string>
+				</dict>
+			</dict>
 		</dict>
     </array>
 	<key>scopeName</key>

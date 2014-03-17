@@ -21,7 +21,7 @@ GIT_SHOW = "git show"
 GIT_LIST_TAGS = "git tag -l -n"
 GIT_TAG = "git tag"
 GIT_REMOVE_TAG = "git tag -d"
-GIT_GREP = "git grep"
+GIT_GREP = "git grep -n"
 
 functions = {
     GIT_LIST_TAGS: sortTags

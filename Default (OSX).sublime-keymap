@@ -57,4 +57,7 @@
     { "keys": ["enter"], "command": "remote_git_show_commit", "context": [
         {"key": "selector", "operator": "equal", "operand": "source.remote_git_log"}
     ]},
+    { "keys": ["enter"], "command": "remote_git_open_grepped_line", "context": [
+        {"key": "selector", "operator": "equal", "operand": "source.remote_git_grep"}
+    ]},
 ]

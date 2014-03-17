@@ -1,5 +1,5 @@
 from .utils import remoteCommand, logCommand, projectRoot, lastCommand
-from .sublime_utils import findFilenameAndCommands, gotoLine, currentLineNo, replaceView, maybeCreateView
+from .sublime_utils import findFilenameAndCommands, gotoLine, currentLineNo, replaceView, maybeCreateView, currentLineText
 from sublime_plugin import WindowCommand, TextCommand
 from .constants import LOG_VIEW_NAME
 from .classes.commands import GitCommand, GIT_LOG, GIT_SHOW
@@ -43,7 +43,7 @@ class RemoteGitLog(TextCommand):
 class RemoteGitShowCommit(TextCommand):
     def run(self, edit):
         logCommand(self.view, self.__class__.__name__)
-        currentLine = self.view.substr(self.view.line(self.view.sel()[0]))
+        currentLine = currentLineText(self.view)
         commit = currentLine[currentLine.find('commit'):].split()[1]
         result = remoteCommand(self.view, GitCommand(GIT_SHOW, commit))
         replaceView(self.view, edit, result, name=LOG_VIEW_NAME)

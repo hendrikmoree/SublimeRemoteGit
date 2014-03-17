@@ -6,6 +6,9 @@ def currentLineNo(view):
     currentLineNo, _ = view.rowcol(view.sel()[0].a)
     return currentLineNo
 
+def currentLineText(view):
+    return view.substr(view.line(view.sel()[0]))
+
 def findFilenameAndCommands(view):
     row, col = view.rowcol(view.sel()[0].a)
     gitStatus = GitStatus.fromMessage(view.substr(Region(0, view.size())))

@@ -40,4 +40,4 @@ def lastCommand(historyIndex=0, remove=True):
 
 def sortTags(tags):
     tags.sort(key=lambda v: list(map(int, v.split()[0].split('.'))))
-    return list(tags)
+    return list(reversed(tags))

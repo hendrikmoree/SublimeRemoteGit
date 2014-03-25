@@ -2,7 +2,7 @@ from subprocess import Popen, PIPE
 from os.path import abspath, dirname, join, isfile
 from json import dumps, loads
 
-mydir = abspath(dirname(__file__))
+mydir = dirname(abspath(__file__))
 lastCommandFile = join(mydir, "last-command")
 
 def remoteCommand(view, command):

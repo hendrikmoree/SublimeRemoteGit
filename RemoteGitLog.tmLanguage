@@ -36,19 +36,31 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\+</string>
+			<string>^[\|\ ]*(\+[^+].*)</string>
 			<key>end</key>
 			<string>$</string>
-			<key>name</key>
-			<string>markup.inserted.diff</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>markup.inserted.diff</string>
+				</dict>
+			</dict>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^-</string>
+			<string>^[\|\ ]*(-[^-].*)</string>
 			<key>end</key>
 			<string>$</string>
-			<key>name</key>
-			<string>markup.deleted.diff</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>markup.deleted.diff</string>
+				</dict>
+			</dict>
 		</dict>
 		<dict>
 			<key>begin</key>

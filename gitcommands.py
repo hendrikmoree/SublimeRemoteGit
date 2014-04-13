@@ -64,7 +64,7 @@ class RemoteGitCommit(TextCommand):
         result = remoteCommand(self.view, GitCommand(GIT_STATUS))
         command = GitCommand(GIT_DIFF)
         command.addOption("--staged")
-        result += remoteCommand(self.view, command)
+        result += "\n" + remoteCommand(self.view, command)
         replaceView(self.view, edit, result)
         self.view.window().show_input_panel("Commit message: ", "", self.commit, None, None)
 

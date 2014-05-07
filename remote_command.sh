@@ -10,9 +10,8 @@ fi
 PROJECT_NAME=$(basename "$PROJECT_DIR")
 mountPoint=$PROJECT_DIR
 serverProjectDir=.
-
 while true; do
-    if mount | grep "$mountPoint" > /dev/null 2>&1; then
+    if mount | grep -i "$mountPoint" > /dev/null 2>&1; then
         break
     fi
     if [ "$mountPoint" == "/" ] || [ "$mountPoint" == "." ]; then
@@ -28,7 +27,7 @@ if [ "$mountPoint" == "/" ] || [ "$mountPoint" == "." ] || [ "$mountPoint" == "$
     )
     exit
 fi
-sshfsCommand=$(ps aux | grep sshfs | grep $mountPoint | awk -F'sshfs' '{print $2}' | head -n 1)
+sshfsCommand=$(ps aux | grep sshfs | grep -i $mountPoint | awk -F'sshfs' '{print $2}' | head -n 1)
 SERVER_DIR=$(mount | grep $mountPoint | awk '{print $1}' | awk -F: '{print $2}' | head -n 1)
 SERVER_LOGIN=$(echo $sshfsCommand | awk '{print $(NF-1)}' | awk -F: '{print $1}')
 SERVER_PORT=22

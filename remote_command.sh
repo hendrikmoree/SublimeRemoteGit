@@ -28,7 +28,7 @@ if [ "$mountPoint" == "/" ] || [ "$mountPoint" == "." ] || [ "$mountPoint" == "$
     exit
 fi
 sshfsCommand=$(ps aux | grep sshfs | grep -i $mountPoint | awk -F'sshfs' '{print $2}' | head -n 1)
-SERVER_DIR=$(mount | grep $mountPoint | awk '{print $1}' | awk -F: '{print $2}' | head -n 1)
+SERVER_DIR=$(mount | grep -i $mountPoint | awk '{print $1}' | awk -F: '{print $2}' | head -n 1)
 SERVER_LOGIN=$(echo $sshfsCommand | awk '{print $(NF-1)}' | awk -F: '{print $1}')
 SERVER_PORT=22
 if $(echo $sshfsCommand | grep "\-p" > /dev/null); then

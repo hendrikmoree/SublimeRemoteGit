@@ -84,7 +84,7 @@
         </dict>
 		<dict>
 			<key>begin</key>
-			<string>^#?    ?(?!modified)</string>
+			<string>^#    ?(?!modified)</string>
 			<key>end</key>
 			<string>$</string>
 			<key>beginCaptures</key>

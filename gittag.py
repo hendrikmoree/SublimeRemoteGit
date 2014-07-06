@@ -28,7 +28,8 @@ class RemoteGitCreateTag(TextCommand):
             pushCommand = GitCommand(GIT_PUSH)
             pushCommand.addOption("--tags")
             remoteCommand(self.view, pushCommand)
-            message_dialog("Tag '%s' created and pushed" % version)
+            packageName = remoteCommand(self.view, GitCommand("git remote show origin | grep 'Fetch URL' | sed 's,.*:,,;s,.*/,,;s,\.git,,;'"))
+            message_dialog("Tag '{0}' created and pushed\nseecr-packages-make {1} {0}".format(version, packageName))
 
 
 class RemoteGitListTags(_RemoteGitBranchCommand):

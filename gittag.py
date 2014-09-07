@@ -1,9 +1,10 @@
 from .classes.commands import GitCommand, GIT_TAG, GIT_LIST_TAGS, GIT_REMOVE_TAG, GIT_PUSH
 from sublime_plugin import TextCommand
-from .utils import remoteCommand
+from .utils import remoteCommand, mydir
 from .sublime_utils import replaceView
 from .gitbranchcommands import _RemoteGitBranchCommand
 from sublime import message_dialog, ok_cancel_dialog
+from subprocess import Popen, PIPE
 
 class RemoteGitCreateTag(TextCommand):
     def run(self, edit):
@@ -29,9 +30,9 @@ class RemoteGitCreateTag(TextCommand):
             pushCommand.addOption("--tags")
             remoteCommand(self.view, pushCommand)
             packageName = remoteCommand(self.view, GitCommand("git remote show origin | grep 'Fetch URL' | sed 's,.*:,,;s,.*/,,;s,\.git,,;'"))
-            command = "./seecr-packages-make {0} {1}".format(packageName, version)
+            command = "seecr-packages-make {0} {1}".format(packageName, version)
             if ok_cancel_dialog("Tag '{0}' created and pushed\nBuild with {1}?".format(version, command)):
-                self.window.run_command('exec', {'cmd': command, 'working_dir': '/Users/hendrik/Development/git/seecr-tools/bin', 'shell': True})
+                stdout, stderr = Popen(["/usr/bin/osascript", "make_package.scpt"] + command.split(), stdout=PIPE, stderr=PIPE, cwd=mydir).communicate()
 
 
 

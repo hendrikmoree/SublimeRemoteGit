@@ -32,4 +32,4 @@ SERVER_DIR=$(mount | grep $mountPoint | awk '{print $1}' | awk -F: '{print $2}' 
 SERVER_LOGIN=$(ps aux | grep sshfs | grep $mountPoint | awk '{print $(NF-1)}' | awk -F: '{print $1}' | head -n 1)
 SERVER_PORT=$(ps aux | grep sshfs | grep $mountPoint | awk '{print $(NF-2)}' | head -n 1)
 # echo REMOTE_USERNAME=${USER} ssh $SERVER_LOGIN -o SendEnv=REMOTE_USERNAME -p $SERVER_PORT "(cd $SERVER_DIR/$serverProjectDir; $COMMAND)"
-REMOTE_USERNAME=${USER} ssh $SERVER_LOGIN -o SendEnv=REMOTE_USERNAME -p $SERVER_PORT "(cd $SERVER_DIR/$serverProjectDir; $COMMAND)"
+REMOTE_USERNAME=${USER} ssh $SERVER_LOGIN -o SendEnv=REMOTE_USERNAME -o SendEnv="GIT_*" -p $SERVER_PORT "(cd $SERVER_DIR/$serverProjectDir; $COMMAND)"

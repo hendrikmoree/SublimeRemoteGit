@@ -1,8 +1,9 @@
 from sublime_plugin import TextCommand
 from .utils import remoteCommand, logCommand
 from .sublime_utils import findFilenameAndCommands, replaceView
-from .classes.commands import GitCommand, GIT_ADD, GIT_ADD_ALL, GIT_RM, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH, GIT_PULL, GIT_COMMIT, GIT_STATUS
+from .classes.commands import GitCommand, GIT_ADD, GIT_ADD_ALL, GIT_RM, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH, GIT_PULL, GIT_COMMIT, GIT_STATUS, GIT_LAST_COMMIT_MESSAGE
 from .constants import ST_VIEW_NAME
+from sublime import message_dialog
 
 class _RemoteGitCommand(TextCommand):
     viewName = ST_VIEW_NAME
@@ -62,13 +63,17 @@ class RemoteGitPull(_RemoteGitCommand):
 class RemoteGitCommit(TextCommand):
     options = []
 
-    def run(self, edit):
+    def run(self, edit, presetMessage=""):
         result = remoteCommand(self.view, GitCommand(GIT_STATUS))
         command = GitCommand(GIT_DIFF)
         command.addOption("--staged")
-        result += "\n" + remoteCommand(self.view, command)
+        stagedDiff = remoteCommand(self.view, command)
+        if not stagedDiff.strip():
+            message_dialog("You have nothing staged for commit")
+            return
+        result += "\n" + stagedDiff
         replaceView(self.view, edit, result)
-        self.view.window().show_input_panel("Commit message: ", "", self.commit, None, None)
+        self.view.window().show_input_panel("Commit message: ", presetMessage, self.commit, None, None)
 
     def commit(self, message):
         command = GitCommand(GIT_COMMIT, message)
@@ -80,6 +85,10 @@ class RemoteGitCommit(TextCommand):
 
 class RemoteGitCommitAmend(RemoteGitCommit):
     options = ['--amend']
+
+    def run(self, edit):
+        presetMessage = remoteCommand(self.view, GitCommand(GIT_LAST_COMMIT_MESSAGE))
+        super(RemoteGitCommitAmend, self).run(edit, presetMessage)
 
 class RemoteGitCommitStageAll(RemoteGitCommit):
     def run(self, edit):

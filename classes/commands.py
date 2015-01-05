@@ -22,6 +22,7 @@ GIT_LIST_TAGS = "git tag -l -n"
 GIT_TAG = "git tag"
 GIT_REMOVE_TAG = "git tag -d"
 GIT_GREP = "git grep -n"
+GIT_LAST_COMMIT_MESSAGE = "git log -1 --pretty=%B"
 
 functions = {
     GIT_LIST_TAGS: sortTags

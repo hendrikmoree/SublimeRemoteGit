@@ -60,6 +60,8 @@ class RemoteGitPull(_RemoteGitCommand):
     addFilename = False
 
 class RemoteGitCommit(TextCommand):
+    options = []
+
     def run(self, edit):
         result = remoteCommand(self.view, GitCommand(GIT_STATUS))
         command = GitCommand(GIT_DIFF)
@@ -69,8 +71,15 @@ class RemoteGitCommit(TextCommand):
         self.view.window().show_input_panel("Commit message: ", "", self.commit, None, None)
 
     def commit(self, message):
-        remoteCommand(self.view, GitCommand(GIT_COMMIT, message))
+        command = GitCommand(GIT_COMMIT, message)
+        for o in self.options:
+            command.addOption(o)
+        command.addOption("-m")
+        remoteCommand(self.view, command)
         self.view.run_command("remote_git_st")
+
+class RemoteGitCommitAmend(RemoteGitCommit):
+    options = ['--amend']
 
 class RemoteGitCommitStageAll(RemoteGitCommit):
     def run(self, edit):

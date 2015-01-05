@@ -14,5 +14,6 @@
     { "caption": "RemoteGit: Git diff for current file", "command": "remote_git_diff"},
     { "caption": "RemoteGit: Create tag", "command": "remote_git_create_tag"},
     { "caption": "RemoteGit: Remove tag", "command": "remote_git_remove_tag"},
-    { "caption": "RemoteGit: Grep", "command": "remote_git_grep"}
+    { "caption": "RemoteGit: Grep", "command": "remote_git_grep"},
+    { "caption": "RemoteGit: Commit with --amend", "command": "remote_git_commit_amend"}
 ]

@@ -20,9 +20,9 @@ while true; do
     serverProjectDir=$(basename "$mountPoint")/$serverProjectDir
     mountPoint=$(dirname "$mountPoint")
 done
-if [ "$mountPoint" == "/" ] || [ "$mountPoint" == "." ] || [ "$mountPoint" == "$HOME/development" ] || [ "$mountPoint" == "$HOME" ]; then
+if [ "$mountPoint" == "/" ] || [ "$mountPoint" == "." ] || [ "$mountPoint" == "$HOME/development" ] || [ "$mountPoint" == "$HOME/Development" ] || [ "$mountPoint" == "$HOME" ]; then
     (
-        cd $PROJECT_DIR
+        cd "$PROJECT_DIR"
         eval $COMMAND
     )
     exit

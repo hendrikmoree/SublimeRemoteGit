@@ -1,6 +1,7 @@
 from subprocess import Popen, PIPE
 from os.path import abspath, dirname, join, isfile
 from json import dumps, loads
+from select import select
 
 mydir = dirname(abspath(__file__))
 lastCommandFile = join(mydir, "last-command")
@@ -8,9 +9,18 @@ lastCommandFile = join(mydir, "last-command")
 def remoteCommand(view, command):
     rootDir = view.rootDir if hasattr(view, 'rootDir') else projectRoot(view)
     args = ["bash", "remote_command.sh", '"%s"' % rootDir] + command.asList()
-    proc = Popen(' '.join(args), cwd=mydir, stdout=PIPE, shell=True)
-    stdout, stderr = proc.communicate(timeout=5)
-    return command.parseResult(stdout.decode('utf-8'))
+    proc = Popen(' '.join(args), cwd=mydir, stdout=PIPE, stderr=PIPE, shell=True, close_fds=True)
+    r, _, _ = select([proc.stdout, proc.stderr], [], [], 5)
+    if not r:
+        print ('Popen timeout for command ' + str(args))
+        proc.kill()
+        return ""
+    result = ""
+    for out in r:
+        result += ''.join([l.decode('utf-8') for l in out.readlines()])
+        out.close()
+    proc.wait()
+    return command.parseResult(result)
 
 def logCommand(view, command, args=None):
     view.lastcommand = [command, args]

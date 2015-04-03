@@ -1,25 +1,20 @@
 from subprocess import Popen, PIPE
 from os.path import abspath, dirname, join, isfile
 from json import dumps, loads
-from select import select
 
 mydir = dirname(abspath(__file__))
 lastCommandFile = join(mydir, "last-command")
 
 def remoteCommand(view, command):
-    rootDir = view.rootDir if hasattr(view, 'rootDir') else projectRoot(view)
-    args = ["bash", "remote_command.sh", '"%s"' % rootDir] + command.asList()
-    proc = Popen(' '.join(args), cwd=mydir, stdout=PIPE, stderr=PIPE, shell=True, close_fds=True)
-    r, _, _ = select([proc.stdout, proc.stderr], [], [], 5)
-    if not r:
-        print ('Popen timeout for command ' + str(args))
-        proc.kill()
-        return ""
-    result = ""
-    for out in r:
-        result += ''.join([l.decode('utf-8') for l in out.readlines()])
-        out.close()
-    proc.wait()
+    def _do():
+        rootDir = view.rootDir if hasattr(view, 'rootDir') else projectRoot(view)
+        args = ["bash", "remote_command.sh", '"%s"' % rootDir] + command.asList()
+        proc = Popen(' '.join(args), cwd=mydir, stdout=PIPE, shell=True, close_fds=True)
+        return proc.communicate(timeout=5)[0].decode('utf-8')
+    result = _do()
+    if 'Permission denied' in result:
+        Popen("/usr/local/bin/cmc -X", stdout=PIPE, stderr=PIPE, shell=True).communicate()
+        result = _do()
     return command.parseResult(result)
 
 def logCommand(view, command, args=None):

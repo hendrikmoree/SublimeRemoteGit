@@ -23,7 +23,7 @@ done
 if [ "$mountPoint" == "/" ] || [ "$mountPoint" == "." ] || [ "$mountPoint" == "$HOME/development" ] || [ "$mountPoint" == "$HOME/Development" ] || [ "$mountPoint" == "$HOME" ]; then
     (
         cd "$PROJECT_DIR"
-        eval $COMMAND
+        eval $COMMAND 2>&1
     )
     exit
 fi

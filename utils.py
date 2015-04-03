@@ -13,7 +13,7 @@ def remoteCommand(view, command):
         return proc.communicate(timeout=5)[0].decode('utf-8')
     result = _do()
     if 'Permission denied' in result:
-        Popen("/usr/local/bin/cmc -X", stdout=PIPE, stderr=PIPE, shell=True).communicate()
+        Popen("/usr/local/bin/cmc -X", shell=True).wait()
         result = _do()
     return command.parseResult(result)
 

@@ -1,16 +1,14 @@
-from subprocess import Popen, PIPE
+from subprocess import Popen
 from os.path import abspath, dirname, join, isfile
 from json import dumps, loads
+from SublimeUtils.sublimeutils import executeCommand
 
 mydir = dirname(abspath(__file__))
 lastCommandFile = join(mydir, "last-command")
 
 def remoteCommand(view, command):
     def _do():
-        rootDir = view.rootDir if hasattr(view, 'rootDir') else projectRoot(view)
-        args = ["bash", "remote_command.sh", '"%s"' % rootDir] + command.asList()
-        proc = Popen(' '.join(args), cwd=mydir, stdout=PIPE, shell=True, close_fds=True)
-        return proc.communicate(timeout=5)[0].decode('utf-8')
+        return executeCommand(view, command.asList())
     result = _do()
     if 'Permission denied' in result:
         Popen("/usr/local/bin/cmc -X", shell=True).wait()
@@ -20,15 +18,6 @@ def remoteCommand(view, command):
 def logCommand(view, command, args=None):
     view.lastcommand = [command, args]
     open(lastCommandFile, 'a').write(dumps([command, args]) + '\n')
-
-def projectRoot(view):
-    currentFile = view.file_name()
-    if currentFile and view.window():
-        for folder in view.window().folders():
-            if folder in currentFile:
-                return folder
-    elif view.window() and view.window().folders():
-        return view.window().folders()[0]
 
 def lastCommand(historyIndex=0, remove=True):
     if isfile(lastCommandFile):

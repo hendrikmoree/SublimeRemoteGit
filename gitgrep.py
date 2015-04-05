@@ -1,7 +1,8 @@
 from sublime import ENCODED_POSITION
 from sublime_plugin import TextCommand
 
-from .utils import remoteCommand, projectRoot
+from SublimeUtils.sublimeutils import projectRoot
+from .utils import remoteCommand
 from .sublime_utils import currentLineText
 from .classes.commands import GitCommand, GIT_GREP
 from .constants import GREP_VIEW_NAME

@@ -100,6 +100,9 @@ class RemoteGitCommitClose(EventListener):
         #     command.addOption(o)
         command.addOption("--file .git/COMMIT_EDITMSG --cleanup strip")
         remoteCommand(view, command)
+        views = view.active_view().window.views()
+        preView = views[views.index(view) - 1]
+        preView.run_command("remote_git_st")
 
 class RemoteGitCommitAmend(RemoteGitCommit):
     options = ['--amend']

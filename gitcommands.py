@@ -1,9 +1,11 @@
-from sublime_plugin import TextCommand
+from sublime_plugin import TextCommand, EventListener
 from .utils import remoteCommand, logCommand
 from .sublime_utils import findFilenameAndCommands, replaceView
 from .classes.commands import GitCommand, GIT_ADD, GIT_ADD_ALL, GIT_RM, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH, GIT_PULL, GIT_COMMIT, GIT_STATUS, GIT_LAST_COMMIT_MESSAGE
-from .constants import ST_VIEW_NAME
-from sublime import message_dialog
+from .constants import ST_VIEW_NAME, COMMIT_EDITMSG_VIEW_NAME
+from sublime import message_dialog, Region
+from SublimeUtils.sublimeutils import projectRoot
+from os.path import join
 
 class _RemoteGitCommand(TextCommand):
     viewName = ST_VIEW_NAME
@@ -64,24 +66,39 @@ class RemoteGitCommit(TextCommand):
     options = []
 
     def run(self, edit, presetMessage=""):
-        result = remoteCommand(self.view, GitCommand(GIT_STATUS))
+        remoteCommand(self.view, GitCommand("git commit"))
+        rootDir = projectRoot(self.view)
+        result = open(join(rootDir, '.git', 'COMMIT_EDITMSG')).read()
         command = GitCommand(GIT_DIFF)
         command.addOption("--staged")
         stagedDiff = remoteCommand(self.view, command)
         if not stagedDiff.strip():
             message_dialog("You have nothing staged for commit")
             return
+        commitRegion = Region(0, len(result))
         result += "\n" + stagedDiff
-        replaceView(self.view, edit, result)
-        self.view.window().show_input_panel("Commit message: ", presetMessage, self.commit, None, None)
+        view = replaceView(self.view, edit, result, name=COMMIT_EDITMSG_VIEW_NAME)
+        view.sel().clear()
+        view.sel().add(Region(0, 0))
+        view.set_read_only(False)
+        view.add_regions(COMMIT_EDITMSG_VIEW_NAME, [commitRegion])
 
-    def commit(self, message):
-        command = GitCommand(GIT_COMMIT, message)
-        for o in self.options:
-            command.addOption(o)
-        command.addOption("-m")
-        remoteCommand(self.view, command)
-        self.view.run_command("remote_git_st")
+class RemoteGitCommitClose(EventListener):
+    def on_pre_close(self, view):
+        if view.name() != COMMIT_EDITMSG_VIEW_NAME:
+            return
+        commitRegion = view.get_regions(COMMIT_EDITMSG_VIEW_NAME)[0]
+        data = view.substr(Region(0, commitRegion.b))
+        rootDir = projectRoot(view)
+        open(join(rootDir, '.git', 'COMMIT_EDITMSG'), 'w').write(data)
+        self.commit(view)
+
+    def commit(self, view):
+        command = GitCommand(GIT_COMMIT)
+        # for o in self.options:
+        #     command.addOption(o)
+        command.addOption("--file .git/COMMIT_EDITMSG --cleanup strip")
+        remoteCommand(view, command)
 
 class RemoteGitCommitAmend(RemoteGitCommit):
     options = ['--amend']

@@ -1,5 +1,5 @@
 from .classes.gitstatus import GitStatus
-from .constants import ST_VIEW_NAME, VIEW_PREFIX
+from .constants import ST_VIEW_NAME, VIEW_PREFIX, COMMIT_EDITMSG_VIEW_NAME
 from sublime import Region
 
 def currentLineNo(view):
@@ -37,7 +37,7 @@ def createView(window, name=ST_VIEW_NAME):
     return view
 
 def maybeCreateView(view, name=ST_VIEW_NAME):
-    if not view.name().startswith(VIEW_PREFIX):
+    if not view.name().startswith(VIEW_PREFIX) or name == COMMIT_EDITMSG_VIEW_NAME:
         view = createView(view.window(), name=name)
     return view
 
@@ -49,3 +49,4 @@ def replaceView(view, edit, content, name=ST_VIEW_NAME):
     view.insert(edit, 0, content)
     view.set_read_only(True)
     view.set_syntax_file('Packages/SublimeRemoteGit/%s.tmLanguage' % name)
+    return view

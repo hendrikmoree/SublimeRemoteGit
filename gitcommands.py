@@ -104,12 +104,12 @@ class RemoteGitCommitClose(EventListener):
         preView = views[views.index(view) - 1]
         preView.run_command("remote_git_st")
 
-class RemoteGitCommitAmend(RemoteGitCommit):
+class ___RemoteGitCommitAmend(RemoteGitCommit):
     options = ['--amend']
 
     def run(self, edit):
         presetMessage = remoteCommand(self.view, GitCommand(GIT_LAST_COMMIT_MESSAGE))
-        super(RemoteGitCommitAmend, self).run(edit, presetMessage)
+        super(___RemoteGitCommitAmend, self).run(edit, presetMessage)
 
 class RemoteGitCommitStageAll(RemoteGitCommit):
     def run(self, edit):

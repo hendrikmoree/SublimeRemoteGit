@@ -88,10 +88,11 @@ class RemoteGitCommitClose(EventListener):
         if view.name() != COMMIT_EDITMSG_VIEW_NAME:
             return
         commitRegion = view.get_regions(COMMIT_EDITMSG_VIEW_NAME)[0]
-        data = view.substr(Region(0, commitRegion.b))
-        rootDir = projectRoot(view)
-        open(join(rootDir, '.git', 'COMMIT_EDITMSG'), 'w').write(data)
-        self.commit(view)
+        if commitRegion.a > 0:
+            data = view.substr(Region(0, commitRegion.b))
+            rootDir = projectRoot(view)
+            open(join(rootDir, '.git', 'COMMIT_EDITMSG'), 'w').write(data)
+            self.commit(view)
 
     def commit(self, view):
         command = GitCommand(GIT_COMMIT)

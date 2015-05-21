@@ -10,7 +10,7 @@ class RemoteGitCreateTag(TextCommand):
     def run(self, edit):
         self.window = self.view.window()
         command = GitCommand(GIT_LIST_TAGS)
-        result = '\n'.join(reversed(remoteCommand(self.view, command).strip().split('\n')))
+        result = remoteCommand(self.view, command).strip()
         replaceView(self.view, edit, result)
         self.window.show_input_panel("Tag version:", "", self.message, None, None)
 

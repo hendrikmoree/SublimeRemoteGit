@@ -33,5 +33,5 @@ def lastCommand(historyIndex=0, remove=True):
         return {'RemoteGitSt': {}}
 
 def sortTags(tags):
-    tags.sort(key=lambda v: list(map(int, v.split()[0].split('.'))))
+    tags.sort(key=lambda v: list(map(lambda i: int(''.join(x for x in i if x.isdigit())), v.split()[0].split('.'))))
     return list(reversed(tags))

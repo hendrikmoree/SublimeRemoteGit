@@ -71,7 +71,7 @@ class RemoteGitCommit(TextCommand):
         remoteCommand(self.view, GitCommand("git commit"))
         rootDir = self.view.rootDir if hasattr(self.view, 'rootDir') else projectRoot(self.view)
         GIT_COMMIT_OPTIONS['rootDir'] = rootDir
-        result = open(join(rootDir, '.git', 'COMMIT_EDITMSG')).read()
+        result = open(join(rootDir, '.git', 'COMMIT_EDITMSG')).read().rstrip()
         command = GitCommand(GIT_DIFF)
         command.addOption("--staged")
         stagedDiff = remoteCommand(self.view, command)
@@ -79,7 +79,7 @@ class RemoteGitCommit(TextCommand):
             message_dialog("You have nothing staged for commit")
             return
         commitRegion = Region(len(presetMessage), len(result))
-        result += "\n" + stagedDiff
+        result += "\n" + stagedDiff.strip()
         view = replaceView(self.view, edit, presetMessage + result, name=COMMIT_EDITMSG_VIEW_NAME)
         view.sel().clear()
         view.sel().add(Region(0, 0))

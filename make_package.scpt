@@ -6,8 +6,9 @@ on run argv
     end if
 
     tell application "iTerm2"
+        activate
+        set newWindow to (create window with default profile)
         tell current window
-            set newTab to (create tab with default profile)
             tell current session
                 write text command & " " & pkgname & " " & pkgversion
             end tell

@@ -5,7 +5,7 @@ on run argv
         set pkgversion to item 3 of argv
     end if
 
-    tell application "iTerm2"
+    tell application "/Applications/iTerm.app"
         if (exists current window) then
             tell current window to create tab with default profile
         else

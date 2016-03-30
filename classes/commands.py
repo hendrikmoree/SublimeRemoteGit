@@ -62,7 +62,11 @@ class GitCommand(object):
         return command
 
     def parseResult(self, result):
+        result = result.strip()
         function = functions.get(self.command)
         if function is None:
-            return result.strip()
-        return '\n'.join(function(result.strip().split('\n')))
+            return result
+        result = result.split("\n")
+        if result[0] == "":
+            result = []
+        return '\n'.join(function(result))

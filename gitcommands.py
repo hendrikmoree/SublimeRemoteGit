@@ -106,8 +106,6 @@ class RemoteGitCommitClose(EventListener):
         settings = load_settings('SublimeRemoteGit.sublime-settings')
         if settings.get('git_author_email') and settings.get('git_author_name'):
             command.addOption("--author '{0} <{1}>'".format(settings.get('git_author_name'), settings.get('git_author_email')))
-        print('Doe:', command.asList())
-        print('Huh', settings)
         remoteCommand(view, command)
         views = view.window().views()
         preView = views[views.index(view) - 1]

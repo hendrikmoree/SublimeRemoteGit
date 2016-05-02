@@ -3,8 +3,9 @@ from .utils import remoteCommand, logCommand
 from .sublime_utils import findFilenameAndCommands, replaceView
 from .classes.commands import GitCommand, GIT_ADD, GIT_ADD_ALL, GIT_RM, GIT_RESET, GIT_CHECKOUT, GIT_DIFF, GIT_PUSH, GIT_PULL, GIT_COMMIT, GIT_STATUS, GIT_LAST_COMMIT_MESSAGE
 from .constants import ST_VIEW_NAME, COMMIT_EDITMSG_VIEW_NAME
-from sublime import message_dialog, Region
+from sublime import message_dialog, Region, load_settings
 from SublimeUtils.sublimeutils import projectRoot
+from os import environ
 from os.path import join
 
 class _RemoteGitCommand(TextCommand):
@@ -102,6 +103,11 @@ class RemoteGitCommitClose(EventListener):
         for o in GIT_COMMIT_OPTIONS['options']:
             command.addOption(o)
         command.addOption("--file .git/COMMIT_EDITMSG --cleanup strip")
+        settings = load_settings('SublimeRemoteGit.sublime-settings')
+        if settings.get('git_author_email') and settings.get('git_author_name'):
+            command.addOption("--author '{0} <{1}>'".format(settings.get('git_author_name'), settings.get('git_author_email')))
+        print('Doe:', command.asList())
+        print('Huh', settings)
         remoteCommand(view, command)
         views = view.window().views()
         preView = views[views.index(view) - 1]
